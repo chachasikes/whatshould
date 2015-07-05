@@ -13,6 +13,7 @@ The next features will be:
 - to be able to randomly choose values from multiple columns (definitely)
 - to use a pinboard as the source of inspirational (probably)
 - save a bunch of different links to google docs or pinboards (probably)
+- list of pre-curated list games (food, lemonopoly, & general art motifs)
 - to be able to display multiple columns as 1 inspirational record (maybe, ex quote and author)
 - to list several pinboards and choose randomly from all of them (maybe)
 - to list several pinboards and pair 2 or 3 random images (maybe)
@@ -50,3 +51,6 @@ Other technologies as they appear.
 1. Navigate to folder.
 2. Run simple webserver: python -m SimpleHTTPServer
 3. Default, visit: http://localhost:8000
+
+
+

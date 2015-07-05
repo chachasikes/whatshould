@@ -1,9 +1,9 @@
 // Interpret and validate URL for google doc.
 // @TODO - rig up input box, store values
+// Handle hex_color (because I can.)
 //---------
 // gdocURL example
 // https://docs.google.com/spreadsheets/d/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/pub?gid=0&single=true&output=csv
-
 
 // @TODO make reactclasses work. install LESS/SASS
 
@@ -23,74 +23,191 @@
 // @TODO render jsx via react-tools once npm isn't broken locally. (running through python server)
 
 
-var Gdoc = React.createClass({
+var Sheet = React.createClass({
   getInitialState: function() {
     return {
-      lastGdocArray: [],
-      randomItems: [],
+      sheetArray: [],
+      displayItems: [],
+      hasHexColor: false,
+      groupColumns: true,
+      maxColumns: 11,
+      columnHeaders: []
     };
+  },
+
+  // Find the first column and first row data from Google Sheet JSON object. 
+  // Get column header list as an array.
+  // Evaluate columns for certain string matches (hex_color, multi_random)
+  // Hexcolor can be a 6 string hex code, with or without a #.
+  // multi_random doesn't need any values, just to be listed as a column name and the sheet will be interpreted as each column should be randomized.
+  // @TODO Think of a better word than "multi_random."
+  // Return some local state settings to be stored with the Class.
+  readSheetHeaderColumns: function(result) {
+    // Set local variable for data from Google Sheet.
+    var lastSheetResults = result.feed.entry;
+
+    var columnNames = $.map( lastSheetResults, function( n ) {
+      return (n['gs$cell']['col'] < 11 && n['gs$cell']['row'] == 1) ? n['gs$cell']['$t'] : null;
+    });
+
+    var state = {};
+
+    // If hasColor, get the hex Color for this row and store it with this value.
+    if ( $.inArray('hex_color', columnNames)  > -1 ){ 
+      state.hasHexColor = true;
+    }
+    console.log(columnNames);
+    console.log($.inArray('multi_random', columnNames))
+    if ( $.inArray('multi_random', columnNames) > -1 ){ 
+      state.groupColumns = false;
+    }
+    console.log(state);
+    return state;
+  },
+
+  mapSheetColumnsUngrouped: function(result) {
+    lastSheet = [];
+    displayItems = [];
+    
+    // Set local variable for data from Google Sheet.
+    var lastSheetResults = result.feed.entry;
+
+    // Map reduce here is slow, could it be faster?
+    // Limited to 10 columns.
+    for (var i = 0; i < 11; i++) {
+
+      // Map Sheet results into locally usable hash object, organized by column
+      var column = $.map( lastSheetResults, function( n ) {
+        // If hasColor, get the hex Color for this row and store it with this value.
+        return n['gs$cell']['col'] == i  ? n : null;
+      });
+
+      if (column.length > 0) {
+        columnKey = column.shift();
+        lastSheet.push(column);
+        randomItem = this.getRandomItem(column);
+        displayItems.push({'label': columnKey['content']['$t'], 'content': randomItem['content'], 'id': randomItem['id']});
+      }
+    }
+
+    state = {
+      sheetArray: lastSheet,
+      displayItems: displayItems
+    }
+    this.setState(state);
+  },
+
+  mapSheetColumnsGrouped: function(result) {
+    lastSheet = [];
+    displayItems = [];
+    
+    // Set local variable for data from Google Sheet.
+    var lastSheetResults = result.feed.entry;
+    var rows = []
+    // For the length of the Sheet, group data by row.
+    for (var i = 1; i < lastSheetResults.length; i++) {
+      var row = $.map( lastSheetResults, function( n ) {
+        // If hasColor, get the hex Color for this row and store it with this value.
+        return n['gs$cell']['row'] == i ? n : null;
+      });
+
+      if (row.length > 0) {
+        rows.push(row);
+      }
+    }
+
+    columnHeaders = rows.shift();
+    lastSheet.push(rows);
+
+    randomItem = this.getRandomRowItem(columnHeaders, rows);
+
+    displayItems.push(randomItem);
+
+    state = {
+      columnHeaders: columnHeaders,
+      sheetArray: lastSheet,
+      displayItems: displayItems
+    }
+    
+    return state;
   },
 
   componentDidMount: function() {
     $.ajax({
       url: this.props.source,
       success: function(result) {
-        var lastGdocResults = result.feed.entry;
-
-        lastGdoc = [];
-        randomItems = [];
-        
-        // Map reduce here is slow, could it be faster?
-        // Limited to 5 columns.
-        for (var i = 0; i < 11; i++) {
-
-          var column = $.map( lastGdocResults, function( n ) {
-            return n['gs$cell']['col'] == i  ? n : null;
-          });
-
-          if (column.length > 0) {
-            columnKey = column.shift();
-            lastGdoc.push(column);
-            randomItem = this.getRandomItem(column);
-            randomItems.push({'label': columnKey['content']['$t'], 'content': randomItem})
-          }
-
-        }
 
         if (this.isMounted()) {
+          columnState = this.readSheetHeaderColumns(result);
+          this.setState(columnState);
           
-          
-          if (lastGdoc.length > 0 && randomItem.length > 0) {
-            this.setState({
-              lastGdocArray: lastGdoc,
-              randomItems: randomItems
-            });
+          if (columnState.groupColumns == false) {
+            dataState = this.mapSheetColumnsGrouped(result);
+            this.setState(dataState);
           }
-
+          else {
+            this.mapSheetColumnsUngrouped(result);
+          }
         }
+
       }.bind(this),
       dataType: 'jsonp',
     });
   },
 
+  getRandomRowItem: function(columnHeaders, rows) {
+    var randomRowNumber = Math.floor(Math.random()*rows.length);
+    var randomItem = rows[randomRowNumber];
+    content = []
+    var item = {};
+    for (var i=0; i< randomItem.length; i++) {
+      content.push({
+        label: columnHeaders[i]['content']['$t'],
+        content: randomItem[i]['content']['$t'],
+        id: randomRowNumber
+      });
+    }
+    return content;
+  },
+
   getRandomItem: function(column) {
-    var randomItem = column[Math.floor(Math.random()*column.length)]['content']['$t'];
-    return randomItem;
+    var randomRowNumber = Math.floor(Math.random()*column.length);
+    var randomItem = column[randomRowNumber]['content']['$t'];
+    return {'content': randomItem, 'id': randomRowNumber};
   },
 
   render: function() {
-    var results = this.state.randomItems;
-    return (
-      <ul>
-        {results.map(function(result) {
-          return <li>{result.label}: {result.content}</li>;
-        })}
-      </ul>
-    );
+    var results = this.state.displayItems;
+
+    if (this.state.groupColumns == false && results !== undefined && results[0] !== undefined) {
+      console.log(results);
+      return (
+          <ul>
+            {results[0].map(function(result) {
+              return <li>{result.label}: {result.content}</li>;
+            })}
+          </ul>
+      );
+    }
+    else {
+        return (
+          <ul>
+            {results.map(function(result) {
+              return <li>{result.label}: {result.content}</li>;
+            })}
+          </ul>
+        );
+    }
+
   }
 });
+// Demo: https://spreadsheets.google.com/feeds/cells/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/default/public/full?min-row=1&min-col=1&max-col=10&alt=json-in-script
+// Kitchen Cards: 1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII
+var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // Kitchen
+// var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 7}; // list
 
+var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "/default/public/full?min-row=1&min-col=1&max-col=" + source.cols + "&alt=json-in-script";
 React.render(
-  <Gdoc source="https://spreadsheets.google.com/feeds/cells/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/default/public/full?min-row=1&min-col=1&max-col=10&alt=json-in-script" />,
+  <Sheet source={sourcePath} />,
   document.getElementById('theme')
 );
