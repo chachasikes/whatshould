@@ -47,9 +47,10 @@ var Sheet = React.createClass({
           // Read column names to determine how to handle the Sheet.
           columnState = this.readSheetHeaderColumns(result);
           this.setState(columnState);
+          console.log(this.state);
           
           // If sheet should be grouped into rows, process as grouped.
-          if (columnState.groupColumns == true) {
+          if (this.state.groupColumns == true) {
             dataState = this.mapSheetColumnsGrouped(result);
             this.setState(dataState);
           }
@@ -85,12 +86,11 @@ var Sheet = React.createClass({
     if ( $.inArray('hex_color', columnNames)  > -1 ){ 
       state.hasHexColor = true;
     }
-    console.log(columnNames);
-    console.log($.inArray('multi_random', columnNames))
-    if ( $.inArray('multi_random', columnNames) > -1 ){ 
+    
+    if ( $.inArray('multi_random', columnNames) > -1 ) { 
       state.groupColumns = false;
     }
-    console.log(state);
+    
     return state;
   },
 
@@ -101,19 +101,19 @@ var Sheet = React.createClass({
     
     // Set local variable for data from Google Sheet.
     var lastSheetResults = result.feed.entry;
-    var rows = []
+    var rows = [];
     // For the length of the Sheet, group data by row.
     for (var i = 1; i < lastSheetResults.length; i++) {
       var row = $.map( lastSheetResults, function( n ) {
         return n['gs$cell']['row'] == i ? n : null;
       });
-
       if (row.length > 0) {
         rows.push(row);
       }
     }
 
     columnHeaders = rows.shift();
+
     lastSheet.push(rows);
 
     randomItem = this.getRandomRowItem(columnHeaders, rows);
@@ -132,10 +132,14 @@ var Sheet = React.createClass({
   mapSheetColumnsUngrouped: function(result) {
     console.log("UnGrouped");
     lastSheet = [];
-    displayItems = [];
     
     // Set local variable for data from Google Sheet.
     var lastSheetResults = result.feed.entry;
+    var content = {
+        type: 'ungrouped',
+        values: [],
+        hexColor: null
+      };
 
     // Map reduce here is slow, could it be faster?
     // Limited to 10 columns.
@@ -147,64 +151,59 @@ var Sheet = React.createClass({
         return n['gs$cell']['col'] == i  ? n : null;
       });
 
+
+
       if (column.length > 0) {
         columnKey = column.shift();
         if (column.length > 0) {
           lastSheet.push(column);
-          randomItem = this.getRandomColumnItem(column);
-
+          var randomItem = this.getRandomColumnItem(columnKey, column);
+          console.log(columnKey['content']['$t']);
           if (columnKey['content']['$t'] !== 'hex_color') {
-            var item = {'label': columnKey['content']['$t'], 'content': randomItem['content'], 'id': randomItem['id']};
-            displayItems.push(item);
+            content['values'].push(randomItem);
           }
           
         }
       }
     }
-
+    console.log(content);
     state = {
       sheetArray: lastSheet,
-      displayItems: displayItems
+      displayItems: content
     }
     this.setState(state);
   },
 
-  getRandomColumnItem: function(column) {
+  getRandomColumnItem: function(columnKey, column) {
     var randomRowNumber = Math.floor(Math.random()*column.length);
     var randomItem = column[randomRowNumber]['content']['$t'];
-
-    // if (columnHeaders[i]['content']['$t'] === "hex_color") {
-    //   item['hexColor'] = "#" + randomItem[i]['content']['$t']; // @TODO add cleanup hex value function.
-    // }
-
-    //// if (columnHeaders[i]['content']['$t'] !== "hex_color") {
-    return {'content': randomItem, 'id': randomRowNumber};
-
+    return {'content': randomItem, 'id': randomRowNumber, 'label': columnKey['content']['$t']};
   },
 
   getRandomRowItem: function(columnHeaders, rows) {
-    
     var randomRowNumber = Math.floor(Math.random()*rows.length);
     var randomItem = rows[randomRowNumber];
-    content = []
+    
+    content = {
+      type: 'grouped',
+      values: [],
+      hexColor: null
+    };
 
     for (var i=0; i< randomItem.length; i++) {
       var item = {};
       
-      if (columnHeaders[i]['content']['$t'] !== "hex_color") {
-        item['label'] = columnHeaders[i]['content']['$t'];
-        item['content'] = randomItem[i]['content']['$t'];
-        item['id'] = randomRowNumber;
-      } 
-      
-      // if (columnHeaders[i]['content']['$t'] === "hex_color") {
-      //   item['hexColor'] = "#" + randomItem[i]['content']['$t']; // @TODO add cleanup hex value function.
-      // }
 
-      if (columnHeaders[i]['content']['$t'] !== "hex_color") {
-        content.push(item);
-      }
+      item['label'] = columnHeaders[i]['content']['$t'];
+      item['content'] = randomItem[i]['content']['$t'];
+      item['id'] = randomRowNumber;
       
+      if (columnHeaders[i]['content']['$t'] === "hex_color") {
+       content.hexColor = "#" + randomItem[i]['content']['$t']; // @TODO add cleanup hex value function.
+      }
+      else {
+        content.values.push(item);      
+      }
     }
     return content;
   },
@@ -212,34 +211,38 @@ var Sheet = React.createClass({
   render: function() {
     var results = this.state.displayItems;
 
-    if (this.state.groupColumns == false && results !== undefined && results[0] !== undefined) {
-      console.log(results);
+    if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
       return (
-
           <div>
-            {results.map(function(result) {
-
+            {results[0]['values'].map(function(result) {
                 // @TODO check props settings here for how to use React  -- type={result.label} 
-                console.log(result);
+                //  style={results[0]['hexColor']} how to do inline styles?
+                // https://github.com/FormidableLabs/radium, https://github.com/js-next/react-style
                 return <div className="card">{result.label}: {result.content}</div>;  
-
             })}
           </div>
       );
     }
-    else {
-      return (
-          <div>
-            {results.map(function(result) {
+    else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
+        return (
+            <div>
+              {results['values'].map(function(result) {
+                  // @TODO check props settings here for how to use React  -- type={result.label} 
 
-                // @TODO check props settings here for how to use React  -- type={result.label} 
-                return <div className="card">{result.content}</div>;  
-
-            })}
-          </div>
-        );
+                  //
+                  return <div className="card">{result.label}: {result.content} </div>;  
+              })}
+            </div>
+          );
     }
-
+    else {
+          return (
+            <div>
+              No results
+            </div>
+          );
+    }
+   
   }
 });
 // Demo: https://spreadsheets.google.com/feeds/cells/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/default/public/full?min-row=1&min-col=1&max-col=10&alt=json-in-script
@@ -248,6 +251,8 @@ var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // 
 // var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // list
 
 var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "/default/public/full?min-row=1&min-col=1&max-col=" + source.cols + "&alt=json-in-script";
+
+
 React.render(
   <Sheet source={sourcePath} />,
   document.getElementById('theme')
