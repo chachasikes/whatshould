@@ -152,9 +152,12 @@ var Sheet = React.createClass({
         if (column.length > 0) {
           lastSheet.push(column);
           randomItem = this.getRandomColumnItem(column);
+
           if (columnKey['content']['$t'] !== 'hex_color') {
-            displayItems.push({'label': columnKey['content']['$t'], 'content': randomItem['content'], 'id': randomItem['id']});
+            var item = {'label': columnKey['content']['$t'], 'content': randomItem['content'], 'id': randomItem['id']};
+            displayItems.push(item);
           }
+          
         }
       }
     }
@@ -217,16 +220,11 @@ var Sheet = React.createClass({
             {results.map(function(result) {
 
                 // @TODO check props settings here for how to use React  -- type={result.label} 
-                return <div className="card">{result.content}</div>;  
+                console.log(result);
+                return <div className="card">{result.label}: {result.content}</div>;  
 
             })}
           </div>
-
-          // <ul>
-          //   {results[0].map(function(result) {
-          //     return <li className="cards">{result.label}: {result.content}</li>;
-          //   })}
-          // </ul>
       );
     }
     else {
@@ -246,8 +244,8 @@ var Sheet = React.createClass({
 });
 // Demo: https://spreadsheets.google.com/feeds/cells/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/default/public/full?min-row=1&min-col=1&max-col=10&alt=json-in-script
 // Kitchen Cards: 1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII
-// var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // Kitchen
-var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // list
+var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // Kitchen
+// var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // list
 
 var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "/default/public/full?min-row=1&min-col=1&max-col=" + source.cols + "&alt=json-in-script";
 React.render(
