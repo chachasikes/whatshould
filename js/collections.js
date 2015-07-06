@@ -1,12 +1,17 @@
 var Collections = React.createClass({
   getDefaultProps: function() {
     return {
-      collections: [],
+      defaultCollections: [
+        {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8, active: true, current: false},
+        // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2, active: true, current: true}
+      ],
       storedCollections: []
     };
   },
 
   render: function() {
+    this.setHTML5LocalStorage();
+    this.loadHTML5LocalStorage();
     this.props.storedCollections = this.loadStoredCollections();
 
     return (
@@ -18,27 +23,35 @@ var Collections = React.createClass({
               <Collection collection={collection} />
           </div>;  
         })}
-
-
       </div>
     );
   },
 
-  loadStoredCollections: function() {
-    // from local store or cookie;
-    // @TODO change data
-    
-    var storedCollections =[
-      {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8, active: true, current: true},
-      {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2, active: true, current: true}
+  setHTML5LocalStorage: function() {
+    var storedCollections = [
+        {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8, active: true, current: true},
+        {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2, active: true, current: true},
+        {key: '1E949ZFaBbQxiSxBBZMyAIw9KJtHolm0XNsnnQoMjuoM', cols: 7, active: true, current: true},
     ];
-    return storedCollections;
+
+    sessionStorage.setItem("whatshould_local_paths", JSON.stringify(storedCollections));
   },
 
-  // loadCurrentActiveCollection: function() {
-  //   var currentCollection = _.select(this.props.collections, function(c) {return c.active === true && c.current === true});
-  //   console.log(currentCollection);
-  // },
+  loadHTML5LocalStorage: function() {
+    // Access some stored data    
+    var HTML5LocalStorage = sessionStorage.getItem("whatshould_local_paths");
+    console.log(HTML5LocalStorage);
+    this.props.HTML5LocalStorage = JSON.parse(HTML5LocalStorage);
+  },
+
+  loadStoredCollections: function() {
+    if ( this.props.HTML5LocalStorage !== undefined && this.props.HTML5LocalStorage.length > 0) {
+      return this.props.HTML5LocalStorage;
+    }
+    else {
+      return this.props.defaultCollections;
+    }
+  },
 
   // updateDisplay: function() {
 
