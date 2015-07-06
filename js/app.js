@@ -247,16 +247,150 @@ var CollectionItem = React.createClass({
   }
 });
 
+// @TODO key
+var Collections = React.createClass({
+  getInitialState: function() {
+    var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // Repeat Patterns
+    var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "/default/public/full?min-row=1&min-col=1&max-col=" + source.cols + "&alt=json-in-script";
+
+    return {
+      sourcePath: sourcePath
+    };
+  },
+
+  render: function() {
+    return (
+      <div className="row">
+        <h2 className="title">Sheets</h2>
+      </div>
+      );
+  },
+
+  createForm: function() {
+
+  },
+
+  renderForm: function() {
+
+  },
+
+  validateForm: function() {
+
+  },
+
+  save: function() {
+
+  },
+
+  edit: function() {
+
+  },
+
+  trash: function() {
+
+  },
+
+  add: function() {
+
+  },
+
+  remove: function() {
+
+  },
+
+  list: function() {
+
+  },
+
+  updateDisplay: function() {
+
+  },
+
+  validate: function() {
+
+  },
+
+  update: function() {
+
+  },
+
+  load: function() {
+
+  },
+
+  setActive: function() {
+
+  },
+
+  unload: function() {
+
+  },
+
+  share: function() {
+
+  },
+
+  copyLink: function() {
+
+  },
+
+  editSource: function() {
+
+  },
+
+  parsePath: function() {
+
+  },
+
+  isValidSheet: function() {
+
+  },
+
+  getMetaData: function() {
+
+  },
+
+  store: function() {
+
+  },
+
+  deleteAll: function() {
+
+  },
+
+  updateAll: function() {
+
+  },
+
+  sheetFormattingGuidelines: function() {
+
+  },
+
+  showAbout: function() {
+
+  },
+
+  toggleMenu: function() {
+
+  },
+
+});
+
 
 // Repeat Patterns: https://spreadsheets.google.com/feeds/cells/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/default/public/full?min-row=1&min-col=1&max-col=10&alt=json-in-script
 // Kitchen Cards: 1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII
 
 // var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // Kitchen
 var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // Repeat Patterns
-
 var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "/default/public/full?min-row=1&min-col=1&max-col=" + source.cols + "&alt=json-in-script";
 
+// @TODO merge with collections?
 React.render(
   <CollectionItem source={sourcePath} />,
   document.getElementById('collection')
+);
+
+React.render(
+  <Collections />,
+  document.getElementById('collection-management')
 );
