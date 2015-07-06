@@ -18,10 +18,11 @@ var Collections = React.createClass({
 
   render: function() {
     this.loadHTML5LocalStorage();
-    this.setHTML5LocalStorage();
     
     this.props.storedCollections = this.loadStoredCollections();
 
+    this.setHTML5LocalStorage();
+    
     return (<div className="row">
         <h2 className="title">Lists</h2>
         {this.props.storedCollections.map(this.eachCollection)}
@@ -39,13 +40,18 @@ var Collections = React.createClass({
   },
 
   setHTML5LocalStorage: function() {
+    //https://remotestorage.io/doc/code/files/remotestorage-js.html
+    // var remoteStorage = new RemoteStorage({
+    //   logging: true  // defaults to false
+    // });
+
     // var storedCollections = [
     //     {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', active: true, current: true},
     //     // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true},
     //     // {key: '1E949ZFaBbQxiSxBBZMyAIw9KJtHolm0XNsnnQoMjuoM', active: true, current: true},
     // ];
 
-    // sessionStorage.removeItem('whatshould_local_paths');
+    
     
     // Safari, in Private Browsing Mode, looks like it supports localStorage but all calls to setItem
     // throw QuotaExceededError. We're going to detect this and just silently drop any calls to setItem
@@ -53,7 +59,7 @@ var Collections = React.createClass({
     if (typeof localStorage === 'object') {
         try {
             // sessionStorage.removeItem('whatshould_local_paths');
-            sessionStorage.setItem("whatshould_local_paths", JSON.stringify(this.props.storedCollections));
+            localStorage.setItem("whatshould_local_paths", JSON.stringify(this.props.storedCollections));
             
         } catch (e) {
             Storage.prototype._setItem = Storage.prototype.setItem;
@@ -65,8 +71,10 @@ var Collections = React.createClass({
 
   loadHTML5LocalStorage: function() {
     // Access some stored data    
-    var HTML5LocalStorage = sessionStorage.getItem("whatshould_local_paths");
+    var HTML5LocalStorage = localStorage.getItem("whatshould_local_paths");
     this.props.HTML5LocalStorage = JSON.parse(HTML5LocalStorage);
+
+
   },
 
   loadStoredCollections: function() {
@@ -86,6 +94,7 @@ var Collections = React.createClass({
     alert('This will delete all your saved paths.');
     // Add cancel or back out-go through.
     // sessionStorage.removeItem('whatshould_local_paths');
+    // localStorage.removeItem('whatshould_local_paths');
   },
 
   updateDisplay: function() {
@@ -109,7 +118,10 @@ var Collections = React.createClass({
   save: function() {
     console.log("save");
     console.log(this.props.storedCollections);
+    this.setHTML5LocalStorage();
+
     var exists = this.keyExists(this.state.value);
+
 
     if (exists === false) {
       var newCollection = {key: this.state.value, current: true, active: true};
