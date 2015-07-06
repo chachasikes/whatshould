@@ -1,0 +1,24 @@
+// Interpret and validate URL for google doc.
+// @TODO - rig up input box, store values
+// Handle hex_color (because I can.)
+
+//---------
+// gdocURL example
+// https://docs.google.com/spreadsheets/d/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/pub?gid=0&single=true&output=csv
+// @TODO make reactclasses work. install LESS/SASS
+
+// TEST: gdoc loads or fails - good gdoc/bad gdoc (no data, bad url, 20 cols, 1 row, no rows, ajax fails)
+
+// Load gdoc via ajax or fail.
+// Parse gdoc or fail. (can be read, can't be read as array, not enough data, errors (content))
+// Use first row as a label if more than one column or fail. 
+// Collect remaining rows as an array or fail.
+
+// Set localdata store.
+// Choose a random item.
+// Update display. // TEST values exist for each column.
+
+// Iterate through other rows until no results. (limited by column)
+// @TODO see if gdoc will allow for 1 data retreival or if multiple ajax calls for columns is the easiest way to get the data.
+// @TODO render jsx via react-tools once npm isn't broken locally. (running through python server)
+
