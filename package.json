@@ -1,0 +1,33 @@
+{
+  "name": "whatshould",
+  "version": "0.0.3",
+  "description": "Simple app for creatives to randomly view data from published spreadsheets and pinboards.",
+  "main": "index.html",
+  "dependencies": {
+    "browserify": "^10.2.4",
+    "react-tools": "^0.13.3",
+    "bower": "^1.4.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2"
+  },
+  "scripts": {
+    "test": "don't know yet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chachasikes/whatshould.git"
+  },
+  "keywords": [
+    "reactjs",
+    "google",
+    "sheets"
+  ],
+  "author": "Chacha Sikes, @chachasikes",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/chachasikes/whatshould/issues"
+  },
+  "homepage": "https://github.com/chachasikes/whatshould#readme"
+}
