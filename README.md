@@ -62,6 +62,23 @@ You can have two kinds of spreadsheets:
 - Find Pinterest API and figure out API params to get the data we want.
 - Set a hex_color value for the grouped rows.
 
+#### Features in progress
+- Create form element to load google sheet path
+- Parse google sheet path to get the key
+- Deal with unknown column length
+- Figure out best way to process form data in ReactJS
+- Decide on the most basic editing features for google sheet path
+- See about storing and clearing a history
+- Think about how authorization and updating refreshing the list of published spreadsheets would work
+- Think about curated lists
+- Handle bad links to invalid files
+- Add a test framework
+- Write out what the tests are for what already exists
+- Mockup the layout and features.
+- Write out what the data model is for rendering display data (ex. label, content, id, hex_color, image, sheet title, date updated, row_date added (?), type, hashexcolor) 
+- figure out where to put a string processing function to clean up hex values.
+- figure out how to make React interpret inline styles.
+
 #### Future Features
 Eventually, you will be able to have:
 - a bunch of lists of lists to choose from (probably)
