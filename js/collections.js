@@ -28,6 +28,9 @@ var Collections = React.createClass({
   },
 
 // safari error: http://stackoverflow.com/questions/14555347/html5-localstorage-error-with-safari-quota-exceeded-err-dom-exception-22-an
+  
+  
+
   setHTML5LocalStorage: function() {
     var storedCollections = [
         {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8, active: true, current: true},
