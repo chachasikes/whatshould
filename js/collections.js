@@ -12,7 +12,9 @@ var Collections = React.createClass({
 
   getInitialState: function () {
     return {
-      google_sheet_key_value: '114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw',
+      google_sheet_key_value: undefined,
+      pinboard_name_value: undefined,
+      pinboard_username_value: undefined
       // gdoc_link_google_sheet_key_value: 'https://docs.google.com/spreadsheets/d/114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw/edit#gid=0'
     };
   },
@@ -46,12 +48,12 @@ var Collections = React.createClass({
     //   logging: true  // defaults to false
     // });
 
-    var storedCollections = [
-        {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
-        {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
-        // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'},
-        // {key: '1E949ZFaBbQxiSxBBZMyAIw9KJtHolm0XNsnnQoMjuoM', active: true, current: true, type: 'googleSheet'},
-    ];
+    // var storedCollections = [
+    //     {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
+    //     {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
+    //     // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'},
+    //     // {key: '1E949ZFaBbQxiSxBBZMyAIw9KJtHolm0XNsnnQoMjuoM', active: true, current: true, type: 'googleSheet'},
+    // ];
 
     
     
@@ -102,7 +104,20 @@ var Collections = React.createClass({
   },
 
   createForm: function() {
-    return (<div><input className="collection-add" google_sheet_key_value={this.state.google_sheet_key_value} onChange={this.handleChange} /></div>);
+    return (<div>
+      <div>Add Google Sheet
+        <input className="collection-add-google" google_sheet_key_value={this.state.google_sheet_key_value} onChange={this.handleChangeGoogleSheet} />
+      </div>
+
+      <div>Add Pinboard
+        name:
+        <input className="collection-add-pinboard-name" pinboard_name_value={this.state.pinboard_name_value} onChange={this.handleChangePinboard} />
+        
+        username:
+        <input className="collection-add-pinboard-username" pinboard_username_value={this.state.pinboard_username_value} onChange={this.handleChangePinboard} />
+      </div>
+
+    </div>);
   },
 
   keyExists: function(key) {
@@ -120,21 +135,42 @@ var Collections = React.createClass({
     console.log(this.props.storedCollections);
     this.setHTML5LocalStorage();
 
-    var exists = this.keyExists(this.state.google_sheet_key_value);
+    
 
+    // @TODO fix save for either type of key
 
-    if (exists === false) {
-      var newCollection = {key: {key: this.state.google_sheet_key_value, type: 'googleSheet'}, current: true, active: true};
-      console.log(newCollection);
+      if (this.state.pinboard_name_value !== undefined && this.state.pinboard_username_value !== undefined) {
+        // var exists = this.keyExists(this.state.pinboard_name_value);
+        // if (exists === false) {
+          var newCollection = {key: {key: this.state.pinboard_name_value, username: this.state.pinboard_username_value, type: 'pinterest'}, current: true, active: true};
+        // }
+      }
+      else if (this.state.google_sheet_key_value !== undefined) {
+
+        var newCollection = {key: {key: this.state.google_sheet_key_value, type: 'googleSheet'}, current: true, active: true};
+      }
+
       this.props.storedCollections.push(newCollection);
-      console.log(this.props.storedCollections);
+
       this.setHTML5LocalStorage();
-    }
+
     this.forceUpdate();
   },
 
-  handleChange: function(event) {
-    this.setState({google_sheet_key_value: event.target.google_sheet_key_value});
+  handleChangeGoogleSheet: function(event) {
+    this.setState({
+      google_sheet_key_value: event.target.google_sheet_key_value,
+      
+    });
+    // unset save
+  },
+
+  handleChangePinboard: function(event) {
+    this.setState({
+      
+      pinboard_name_value: event.target.pinboard_name_value,
+      pinboard_username_value: event.target.pinboard_username_value,
+    });
     // unset save
   },
 
