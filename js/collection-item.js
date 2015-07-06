@@ -11,53 +11,50 @@ var CollectionItem = React.createClass({
 
  // Depending on the type of display (grouped or ungrouped), provide markup.
   render: function() {
+    var results = this.state.displayItems;
 
-    // console.log(this.props.collection);
+    if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
+      return (
+          <div className="row">
+            <h2 className="title">{this.props.collection.sheetTitle}</h2>
+            {results[0]['values'].map(function(result) {
+                // @TODO check props settings here for how to use React  -- type={result.label} 
+                //  style={results[0]['hexColor']} how to do inline styles?
+                // https://github.com/FormidableLabs/radium, https://github.com/js-next/react-style
+                return <div className="record col-md-4 col-xs-12">
+                    <div className="card">
+                    <div className="card-label">{result.label}</div>
+                    <div className="card-content">{result.content}</div>
+                    </div>
+                  </div>; 
+            })}
+          </div>
+      );
+    }
+    else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
+        return (
+            <div className="row">
+              <h2 className="title">{this.state.sheetTitle}</h2>
+              {results['values'].map(function(result) {
+                  // @TODO check props settings here for how to use React  -- type={result.label} 
 
-    // var results = this.state.displayItems;
-
-    // if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
-    //   return (
-    //       <div className="row">
-    //         // <h2 className="title">{this.props.collection.sheetTitle}</h2>
-    //         {results[0]['values'].map(function(result) {
-    //             // @TODO check props settings here for how to use React  -- type={result.label} 
-    //             //  style={results[0]['hexColor']} how to do inline styles?
-    //             // https://github.com/FormidableLabs/radium, https://github.com/js-next/react-style
-    //             return <div className="record col-md-4 col-xs-12">
-    //                 <div className="card">
-    //                 <div className="card-label">{result.label}</div>
-    //                 <div className="card-content">{result.content}</div>
-    //                 </div>
-    //               </div>; 
-    //         })}
-    //       </div>
-    //   );
-    // }
-    // else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
-    //     return (
-    //         <div className="row">
-    //           // <h2 className="title">{this.state.sheetTitle}</h2>
-    //           {results['values'].map(function(result) {
-    //               // @TODO check props settings here for how to use React  -- type={result.label} 
-
-    //             return <div className="record col-md-4 col-xs-12">
-    //               <div className="card">
-    //                 <div className="card-label">{result.label}</div>
-    //                 <div className="card-content">{result.content}</div>
-    //                 </div>
-    //               </div>;  
-    //           })}
-    //         </div>
-    //       );
-    // }
-    // else {
-    //       return (
-    //         <div>
-    //           No results yet... loading.
-    //         </div>
-    //       );
-    // }
+                return <div className="record col-md-4 col-xs-12">
+                  <div className="card">
+                    <div className="card-label">{result.label}</div>
+                    <div className="card-content">{result.content}</div>
+                    </div>
+                  </div>;  
+              })}
+            </div>
+          );
+    }
+    else {
+          return (
+            <div>
+              No results yet... loading.
+            </div>
+          );
+    }
    
   },
 
@@ -77,12 +74,13 @@ var CollectionItem = React.createClass({
   // If Google Sheet loads, process the results.
   componentDidMount: function() {
     // Load Google Sheet.
+
     $.ajax({
-      url: this.props.collection.sourcePath,
+      url: this.props.sourcePath,
       success: function(result) {
 
         if (this.isMounted()) {
-          console.log("m");
+
           // Read column names to determine how to handle the Sheet.
           // titleState = this.readSheetTitle(result);
           // this.setState(titleState);

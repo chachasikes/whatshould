@@ -1,30 +1,25 @@
 var Collection = React.createClass({
-  
+  getInitialState: function() {
+    return {};
+  },
   render: function() {
-
-    console.log(this.props.collection);
-    if (this.props.collection.key !== undefined && this.props.collection.cols !== undefined) {
-      // this.setState(this.getSourcePath(this.props.collection));
+    
+    if (this.props.collection.active === true && this.props.collection.current === true && this.state.sourcePath !== undefined) {
+      
+      return (<div className="row">
+         <h2 className="title">{this.state.sheetTitle}</h2>
+          <div className="collection-item col-md-12 col-xs-12">
+            <CollectionItem sourcePath={this.state.sourcePath} />
+          </div>
+        </div>);
     }
 
-    // if (this.props.collection.active === true && this.props.collection.current === true) {
-      
-    //   return (<div className="row">
-    //       <h2 className="title">Sheets</h2>
-    //       {this.state.collection.sheetTitle}
-    //       <div className="collection-item col-md-12 col-xs-12">
-    //         <CollectionItem collection={this.state.collection} />
-    //       </div>
-    //     </div>);
-    // }
-
-    // else {
+    else {
       return ( <div className="row">
-        <h2 className="title">Sheets</h2>
-        // {this.state.collection.sheetTitle}
+        <h2 className="title">{this.state.sheetTitle}</h2>
       </div>
       );
-    // }
+    }
   },
 
   getSourcePath: function(collection) {
@@ -34,7 +29,9 @@ var Collection = React.createClass({
   },
 
   // Get the title of the sheet. (Document title is apparently unavailable.)
-  readSheetMetadata: function(result) {
+  buildSheetMetadata: function(result) {
+
+
     return {
       sheetTitle: result.feed.title.$t,
       // @TODO Map these to the feed.
@@ -47,24 +44,31 @@ var Collection = React.createClass({
       numberItems: 1,
       type: 'ungrouped',
       source_edit_path: '',
+
     };
 
   },
 
   componentDidMount: function() {
+
+    if (this.props.collection.key !== undefined && this.props.collection.cols !== undefined) {
+      var sourcePath = this.getSourcePath(this.props.collection);
+    }
+
     // Load Google Sheet.
     $.ajax({
-      url: collection.sourcePath,
+      url: sourcePath.sourcePath,
       success: function(result) {
-
         if (this.isMounted()) {
           console.log("mount collection");
           // Get sheet metadata.
-          var metadata = this.readSheetMetadata(result);
-          this.state.collection = this.props.collection;
-          this.state.collection.metadata = metadata;
+          var metadata = this.buildSheetMetadata(result);
+          
+          this.setState(metadata);
+          this.setState({sourcePath: sourcePath.sourcePath});
+          console.log(this.state);
+          this.forceUpdate();
         }
-
       }.bind(this),
       dataType: 'jsonp',
     });
