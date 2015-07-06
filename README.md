@@ -107,3 +107,10 @@ The purpose of the technology choices for this app will be to play with some new
 1. Navigate to folder.
 2. Run simple webserver: python -m SimpleHTTPServer
 3. Default, visit: http://localhost:8000
+
+
+### Tests
+#### Interfaces
+Jasmine: http://localhost:8000/_SpecRunner.html   (npm install jasmine)
+QUnit: http://localhost:8000/tests/test.html   (npm install qunit)
+
