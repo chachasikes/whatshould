@@ -1,11 +1,20 @@
 // Load a Google Sheet and process results as a randomly selected item from a Collection.
 var CollectionItem = React.createClass({
+  // isPinterestBoard: function(results){
+  //   if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
+  //     return true;
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // },
 
  // Depending on the type of display (grouped or ungrouped), provide markup.
   render: function() {
     var results = this.state.displayItems;
+    console.log(this.state.displayItems);
 
-    if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
+    if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined && this.state.isPinterestBoard == false) {
       return (
           <div className="row">
             
@@ -40,6 +49,24 @@ var CollectionItem = React.createClass({
             </div>
           );
     }
+    else if (this.state.isPinterestBoard === true && results !== undefined && results[0] !== undefined ) {
+
+        return (
+            <div className="row">
+              
+              {results.map(function(result) {
+                  // @TODO check props settings here for how to use React  -- type={result.label} 
+
+                return <div className="record col-md-4 col-xs-12">
+                  <div className="card">
+                      <div className="card-content"><a href={result['link']}>  <img src={result['image']['url']} /> </a></div>
+                      <div className="card-label">{result['content']}</div>
+                    </div>
+                  </div>;  
+              })}
+            </div>
+          );
+    }
     else {
           return (
             <div>
@@ -58,7 +85,8 @@ var CollectionItem = React.createClass({
       hasHexColor: false,
       groupColumns: true,
       maxColumns: 11,
-      columnHeaders: []
+      columnHeaders: [],
+      isPinterestBoard: false,
     };
   },
 
@@ -78,12 +106,18 @@ var CollectionItem = React.createClass({
           this.setState(columnState);
           
           // If sheet should be grouped into rows, process as grouped.
-          if (this.state.groupColumns == true) {
-            dataState = this.mapSheetColumnsGrouped(result);
-            this.setState(dataState);
+          if (this.state.isPinterestBoard === false ) {
+            if (this.state.groupColumns == true) {
+              dataState = this.mapSheetColumnsGrouped(result);
+              this.setState(dataState);
+            }
+            else {
+              this.mapSheetColumnsUngrouped(result);
+            }
           }
           else {
-            this.mapSheetColumnsUngrouped(result);
+            dataState = this.mapPinterestBoard(result);
+            this.setState(dataState);
           }
         }
 
@@ -106,26 +140,63 @@ var CollectionItem = React.createClass({
     // @TODO Think of a better word than "multi_column."
     // Return some local state settings to be stored with the Class.
 
-    // Set local variable for data from Google Sheet.
-    var lastSheetResults = result.feed.entry;
 
-    var columnNames = $.map( lastSheetResults, function( n ) {
-      return (n['gs$cell']['col'] < 11 && n['gs$cell']['row'] == 1) ? n['gs$cell']['$t'] : null;
-    });
-
+    
     var state = {};
+    // Set local variable for data from Google Sheet.
+    if (result.data !== undefined && result.data !== null && result.data.board !== null) {
+        state.hasHexColor = false;
+        state.groupColumns = false;
+        state.isPinterestBoard = true;
+        return state;
+    }
+    else {
+      var lastSheetResults = result.feed.entry;
 
-    // If hasColor, get the hex Color for this row and store it with this value.
-    if ( $.inArray('hex_color', columnNames)  > -1 ){ 
-      state.hasHexColor = true;
+      var columnNames = $.map( lastSheetResults, function( n ) {
+        return (n['gs$cell']['col'] < 11 && n['gs$cell']['row'] == 1) ? n['gs$cell']['$t'] : null;
+      });
+
+
+      // If hasColor, get the hex Color for this row and store it with this value.
+      if ( $.inArray('hex_color', columnNames)  > -1 ){ 
+        state.hasHexColor = true;
+      }
+      
+      if ( $.inArray('multi_column', columnNames) > -1 ) { 
+        state.groupColumns = false;
+      }
+      
+      return state;
+    }
+  },
+
+  // Process the random pin item;
+  mapPinterestBoard: function(result) {
+    lastSheet = [];
+    displayItems = [];
+    
+    // Set local variable for data from Google Sheet.
+    var pinResults = result.data.pins;
+
+
+    lastSheet = pinResults;
+    var pinCount = 3;
+
+
+    for (var i=0;i<pinCount;i++){
+      randomItem = this.getRandomPinItem(pinResults);
+      displayItems.push(randomItem);  
     }
     
-    if ( $.inArray('multi_column', columnNames) > -1 ) { 
-      state.groupColumns = false;
+    state = {
+      sheetArray: lastSheet,
+      displayItems: displayItems
     }
     
     return state;
   },
+
 
   // Process the feed from Google Sheets and cluster cells data into row objects.
   mapSheetColumnsGrouped: function(result) {
@@ -201,6 +272,13 @@ var CollectionItem = React.createClass({
       displayItems: content
     }
     this.setState(state);
+  },
+
+  getRandomPinItem: function(pins) {
+    var randomRowNumber = Math.floor(Math.random()*pins.length);
+    randomPin = pins[randomRowNumber];
+    console.log(randomPin);
+    return {'content': randomPin.description, 'id': randomPin.id, 'label': 'label', 'link': randomPin.link, 'image': randomPin.images['237x'] };
   },
 
   // Chose an item from a column list and format as a data object for display.

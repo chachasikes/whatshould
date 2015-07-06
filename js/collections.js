@@ -2,8 +2,9 @@ var Collections = React.createClass({
   getDefaultProps: function() {
     return {
       defaultCollections: [
-        {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', active: true, current: true},
-        // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true}
+        {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
+        {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
+        // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'}
       ],
       storedCollections: [],
     };
@@ -11,8 +12,8 @@ var Collections = React.createClass({
 
   getInitialState: function () {
     return {
-      value: '114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw',
-      // gdoc_link_value: 'https://docs.google.com/spreadsheets/d/114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw/edit#gid=0'
+      google_sheet_key_value: '114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw',
+      // gdoc_link_google_sheet_key_value: 'https://docs.google.com/spreadsheets/d/114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw/edit#gid=0'
     };
   },
 
@@ -45,11 +46,12 @@ var Collections = React.createClass({
     //   logging: true  // defaults to false
     // });
 
-    // var storedCollections = [
-    //     {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', active: true, current: true},
-    //     // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true},
-    //     // {key: '1E949ZFaBbQxiSxBBZMyAIw9KJtHolm0XNsnnQoMjuoM', active: true, current: true},
-    // ];
+    var storedCollections = [
+        {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
+        {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
+        // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'},
+        // {key: '1E949ZFaBbQxiSxBBZMyAIw9KJtHolm0XNsnnQoMjuoM', active: true, current: true, type: 'googleSheet'},
+    ];
 
     
     
@@ -73,8 +75,6 @@ var Collections = React.createClass({
     // Access some stored data    
     var HTML5LocalStorage = localStorage.getItem("whatshould_local_paths");
     this.props.HTML5LocalStorage = JSON.parse(HTML5LocalStorage);
-
-
   },
 
   loadStoredCollections: function() {
@@ -102,7 +102,7 @@ var Collections = React.createClass({
   },
 
   createForm: function() {
-    return (<div><input className="collection-add" value={this.state.value} onChange={this.handleChange} /></div>);
+    return (<div><input className="collection-add" google_sheet_key_value={this.state.google_sheet_key_value} onChange={this.handleChange} /></div>);
   },
 
   keyExists: function(key) {
@@ -120,11 +120,11 @@ var Collections = React.createClass({
     console.log(this.props.storedCollections);
     this.setHTML5LocalStorage();
 
-    var exists = this.keyExists(this.state.value);
+    var exists = this.keyExists(this.state.google_sheet_key_value);
 
 
     if (exists === false) {
-      var newCollection = {key: this.state.value, current: true, active: true};
+      var newCollection = {key: {key: this.state.google_sheet_key_value, type: 'googleSheet'}, current: true, active: true};
       console.log(newCollection);
       this.props.storedCollections.push(newCollection);
       console.log(this.props.storedCollections);
@@ -134,7 +134,7 @@ var Collections = React.createClass({
   },
 
   handleChange: function(event) {
-    this.setState({value: event.target.value});
+    this.setState({google_sheet_key_value: event.target.google_sheet_key_value});
     // unset save
   },
 
