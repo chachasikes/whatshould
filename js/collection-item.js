@@ -1,11 +1,3 @@
-// Repeat Patterns: https://spreadsheets.google.com/feeds/cells/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/default/public/full?min-row=1&min-col=1&max-col=10&alt=json-in-script
-// Kitchen Cards: 1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII
-
-// var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // Kitchen
-var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // Repeat Patterns
-var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "/default/public/full?min-row=1&min-col=1&max-col=" + source.cols + "&alt=json-in-script";
-// source={sourcePath} 
-
 // Load a Google Sheet and process results as a randomly selected item from a Collection.
 var CollectionItem = React.createClass({
 
@@ -245,11 +237,5 @@ var CollectionItem = React.createClass({
       }
     }
     return content;
-  },
-
-  cardContent: function(result) {
-
-  },
-
- 
+  }, 
 });
