@@ -6,9 +6,6 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    qunit: {
-        all: ['test/qunit-runner.html']
-    }
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -25,10 +22,4 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['uglify']);
-
-
-
-  grunt.registerTask('test', 'qunit');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
-
 };
