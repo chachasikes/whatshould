@@ -67,10 +67,10 @@ var Sheet = React.createClass({
 
   // Find the first column and first row data from Google Sheet JSON object. 
   // Get column header list as an array.
-  // Evaluate columns for certain string matches (hex_color, multi_random)
+  // Evaluate columns for certain string matches (hex_color, multi_column)
   // Hexcolor can be a 6 string hex code, with or without a #.
-  // multi_random doesn't need any values, just to be listed as a column name and the sheet will be interpreted as each column should be randomized.
-  // @TODO Think of a better word than "multi_random."
+  // multi_column doesn't need any values, just to be listed as a column name and the sheet will be interpreted as each column should be randomized.
+  // @TODO Think of a better word than "multi_column."
   // Return some local state settings to be stored with the Class.
   readSheetHeaderColumns: function(result) {
     // Set local variable for data from Google Sheet.
@@ -87,7 +87,7 @@ var Sheet = React.createClass({
       state.hasHexColor = true;
     }
     
-    if ( $.inArray('multi_random', columnNames) > -1 ) { 
+    if ( $.inArray('multi_column', columnNames) > -1 ) { 
       state.groupColumns = false;
     }
     
