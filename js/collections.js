@@ -62,7 +62,7 @@ var Collections = React.createClass({
   },
 
   loadStoredCollections: function() {
-    if ( this.props.HTML5LocalStorage !== undefined && this.props.HTML5LocalStorage.length > 0) {
+    if ( this.props.HTML5LocalStorage !== undefined && this.props.HTML5LocalStorage !== null && this.props.HTML5LocalStorage.length > 0) {
       return this.props.HTML5LocalStorage;
     }
     else {
