@@ -1,4 +1,4 @@
 React.render(
   <Collections />,
-  document.getElementById('collections')
+  document.getElementById('collections-list')
 );

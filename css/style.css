@@ -9,18 +9,18 @@ h2 {
   margin: 20px 0 40px 0;
 }
 
-#collection .card {
+.collection-item .card {
   background-color: #eee;
   margin: 20px 0 40px 0;
   padding: 10px;
 }
 
-#collection .card-label {
+.collection-item .card-label {
   margin-top: 10px;
   line-height: 1em;
 }
 
-#collection .card-content {
+.collection-item .card-content {
   font-size: 3em;
   line-height: 1em;
 }

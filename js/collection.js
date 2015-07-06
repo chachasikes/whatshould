@@ -9,7 +9,7 @@ var Collection = React.createClass({
       return (<div className="row">
          <h2 className="title">{this.state.sheetTitle}</h2>
           <div className="collection-item col-md-12 col-xs-12">
-            <CollectionItem sourcePath={this.state.sourcePath} />
+            <CollectionItem sourcePath={this.state.sourcePath} sheetTitle={this.state.sheetTitle} />
           </div>
         </div>);
     }

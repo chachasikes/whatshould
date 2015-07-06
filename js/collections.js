@@ -30,7 +30,7 @@ var Collections = React.createClass({
     
     var storedCollections =[
       {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8, active: true, current: true},
-      {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2, active: true, current: false}
+      {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2, active: true, current: true}
     ];
     return storedCollections;
   },
