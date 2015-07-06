@@ -36,7 +36,7 @@ For this to work:
 7. You can edit your Google Doc and make sure the published version is updated. Sometimes you have to go back to the Publish to Web button and re-publish it.
 8. I recommend making a copy of an existing spreadsheet you might use, and adjusting it for use with this app.
 9. You can keep your spreadsheet editable by others if you like, and ask friends to add more suggestions. 
-
+10. The app uses the name your Sheet rather than the name of the file, so rename it if you are feeling so inclined.
 
 You can have two kinds of spreadsheets:
 1. Single Record: Where all of the items are for one record (for example, a quote with an author name). This is the default behavior.

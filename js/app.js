@@ -22,9 +22,11 @@ var CollectionItem = React.createClass({
 
         if (this.isMounted()) {
           // Read column names to determine how to handle the Sheet.
+          titleState = this.readSheetTitle(result);
+          this.setState(titleState);
+          
           columnState = this.readSheetHeaderColumns(result);
           this.setState(columnState);
-          console.log(this.state);
           
           // If sheet should be grouped into rows, process as grouped.
           if (this.state.groupColumns == true) {
@@ -39,6 +41,11 @@ var CollectionItem = React.createClass({
       }.bind(this),
       dataType: 'jsonp',
     });
+  },
+
+  // Get the title of the sheet. (Document title is apparently unavailable.)
+  readSheetTitle: function(result) {
+    return {sheetTitle: result.feed.title.$t};
   },
 
   // Find the first column and first row data from Google Sheet JSON object. 
@@ -193,6 +200,7 @@ var CollectionItem = React.createClass({
     if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
       return (
           <div>
+            <h2>{this.state.sheetTitle}</h2>
             {results[0]['values'].map(function(result) {
                 // @TODO check props settings here for how to use React  -- type={result.label} 
                 //  style={results[0]['hexColor']} how to do inline styles?
@@ -205,6 +213,7 @@ var CollectionItem = React.createClass({
     else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
         return (
             <div>
+              <h2>{this.state.sheetTitle}</h2>
               {results['values'].map(function(result) {
                   // @TODO check props settings here for how to use React  -- type={result.label} 
 
@@ -236,5 +245,5 @@ var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "
 
 React.render(
   <CollectionItem source={sourcePath} />,
-  document.getElementById('collection-item')
+  document.getElementById('collection')
 );
