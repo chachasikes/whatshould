@@ -1,11 +1,36 @@
-#content {
-
+h1 {
+  font-size: 1em;
+}
+h2 {
+  font-size: 1em;
 }
 
-#content .label {
-
+#collection .title {
+  margin: 20px 0 40px 0;
 }
 
-#content .content {
+#collection .card {
+  background-color: #eee;
+  margin: 20px 0 40px 0;
+  padding: 10px;
+}
+
+#collection .card-label {
+  margin-top: 10px;
+  line-height: 1em;
+}
+
+#collection .card-content {
+  font-size: 3em;
+  line-height: 1em;
+}
+
+#menu-toggle {
+  position: absolute;
+  left: 0;
+  bottom: 0;
   font-size: 2em;
+  background-color: #444;
+  color: #fff;
+  padding: 0 20px 0 0;
 }

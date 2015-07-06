@@ -193,32 +193,45 @@ var CollectionItem = React.createClass({
     return content;
   },
 
+  cardContent: function(result) {
+
+  },
+
   // Depending on the type of display (grouped or ungrouped), provide markup.
   render: function() {
     var results = this.state.displayItems;
 
     if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
       return (
-          <div>
-            <h2>{this.state.sheetTitle}</h2>
+          <div className="row">
+            <h2 className="title">{this.state.sheetTitle}</h2>
             {results[0]['values'].map(function(result) {
                 // @TODO check props settings here for how to use React  -- type={result.label} 
                 //  style={results[0]['hexColor']} how to do inline styles?
                 // https://github.com/FormidableLabs/radium, https://github.com/js-next/react-style
-                return <div className="card">{result.label}: {result.content}</div>;  
+                return <div className="record col-md-4 col-xs-12">
+                    <div className="card">
+                    <div className="card-label">{result.label}</div>
+                    <div className="card-content">{result.content}</div>
+                    </div>
+                  </div>; 
             })}
           </div>
       );
     }
     else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
         return (
-            <div>
-              <h2>{this.state.sheetTitle}</h2>
+            <div className="row">
+              <h2 className="title">{this.state.sheetTitle}</h2>
               {results['values'].map(function(result) {
                   // @TODO check props settings here for how to use React  -- type={result.label} 
 
-                  //
-                  return <div className="card">{result.label}: {result.content} </div>;  
+                return <div className="record col-md-4 col-xs-12">
+                  <div className="card">
+                    <div className="card-label">{result.label}</div>
+                    <div className="card-content">{result.content}</div>
+                    </div>
+                  </div>;  
               })}
             </div>
           );
@@ -238,8 +251,8 @@ var CollectionItem = React.createClass({
 // Repeat Patterns: https://spreadsheets.google.com/feeds/cells/17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU/default/public/full?min-row=1&min-col=1&max-col=10&alt=json-in-script
 // Kitchen Cards: 1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII
 
-var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // Kitchen
-// var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // Repeat Patterns
+// var source = {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', cols: 2}; // Kitchen
+var source = {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', cols: 8}; // Repeat Patterns
 
 var sourcePath = "https://spreadsheets.google.com/feeds/cells/" + source.key + "/default/public/full?min-row=1&min-col=1&max-col=" + source.cols + "&alt=json-in-script";
 
