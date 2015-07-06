@@ -62,6 +62,7 @@ You can have two kinds of spreadsheets:
 - Find Google Sheets API documentation and figure out API params to get the data we want.
 - Find Pinterest API and figure out API params to get the data we want.
 - Set a hex_color value for the grouped rows.
+- Installed grunt, bower, qunit and jasmine... probably are all close to being functional.
 
 #### Features in progress
 - Create form element to load google sheet path
@@ -110,6 +111,7 @@ The purpose of the technology choices for this app will be to play with some new
 
 
 ### Tests
+
 #### Interfaces
 Jasmine: http://localhost:8000/_SpecRunner.html   (npm install jasmine)
 QUnit: http://localhost:8000/tests/test.html   (npm install qunit)
