@@ -26,20 +26,38 @@ var Collections = React.createClass({
 
     this.setHTML5LocalStorage();
     
-    return (<div className="row">
-        <h2 className="title">Lists</h2>
-        {this.props.storedCollections.map(this.eachCollection)}
+    if (this.props.storedCollections !== undefined && this.props.storedCollections.length > 0 &&  this.props.storedCollections !== null) {
+      return (<div className="row">
+          <h2 className="title">Lists</h2>
+          {this.props.storedCollections.map(this.eachCollection)}
 
-        {this.addControls()}
-        {this.createForm()}
-      </div>
-    );
+          {this.addControls()}
+          {this.createForm()}
+        </div>
+      );
+    }
+    else {
+        return (<div className="row">
+          <h2 className="title">Lists</h2>
+          Add some Google Sheets or Pinterest boards.
+
+          {this.addControls()}
+          {this.createForm()}
+        </div>
+      ); 
+    }
   },
 
   eachCollection: function(collection, i) {
-    return (<div className="collection col-md-12 col-xs-12">
-        <Collection collection={collection} key={collection.key} onChange={this.update} index={i} onRemove={this.remove} />
-    </div>);
+    console.log(collection);
+    if (collection !== null) {
+      return (<div className="collection panel panel-default col-md-12 col-xs-12">
+          <Collection collection={collection} key={collection.key} onChange={this.update} index={i} onRemove={this.remove} />
+      </div>);
+    }
+    else {
+      return;
+    }
   },
 
   setHTML5LocalStorage: function() {
@@ -80,6 +98,10 @@ var Collections = React.createClass({
   },
 
   loadStoredCollections: function() {
+// https://github.com/ParsePlatform/ParseReact/blob/master/docs/Subscriptions.md
+// https://github.com/ParsePlatform/ParseReact/blob/master/docs/DataMutations.md
+
+
     if ( this.props.HTML5LocalStorage !== undefined && this.props.HTML5LocalStorage !== null) {
       return this.props.HTML5LocalStorage;
     }
@@ -104,8 +126,8 @@ var Collections = React.createClass({
   },
 
   createForm: function() {
-    return (<div>
-      <div>Add Google Sheet
+    return (<div id="collections-add" className="row" >
+      <div className="col-md-12 col-xs-12">Add Google Sheet
         <input className="collection-add-google" google_sheet_key_value={this.state.google_sheet_key_value} onChange={this.handleChangeGoogleSheet} />
       </div>
 
@@ -134,9 +156,7 @@ var Collections = React.createClass({
     console.log("save");
     console.log(this.props.storedCollections);
     this.setHTML5LocalStorage();
-
     
-
     // @TODO fix save for either type of key
 
       if (this.state.pinboard_name_value !== undefined && this.state.pinboard_username_value !== undefined) {
@@ -162,7 +182,6 @@ var Collections = React.createClass({
       google_sheet_key_value: event.target.google_sheet_key_value,
       
     });
-    // unset save
   },
 
   handleChangePinboard: function(event) {
@@ -171,44 +190,7 @@ var Collections = React.createClass({
       pinboard_name_value: event.target.pinboard_name_value,
       pinboard_username_value: event.target.pinboard_username_value,
     });
-    // unset save
-  },
-
-  update: function() {
 
   },
-
-  remove: function() {
-
-  },
-
-  // edit: function() {
-
-  // },
-
-  // trash: function() {
-
-  // },
-
-  // add: function() {
-
-  // },
-
-  // setActive: function() {
-
-  // },
-
-  sheetFormattingGuidelines: function() {
-
-  },
-
-  showAbout: function() {
-
-  },
-
-  toggleMenu: function() {
-
-  },
-
 }
 );

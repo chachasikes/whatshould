@@ -4,9 +4,18 @@ var Collection = React.createClass({
   },
   render: function() {
     if (this.props.collection.active === true && this.props.collection.current === true && this.state.sourcePath !== undefined) {
-      return (<div className="row">
-         <h2 className="title">{this.state.sheetTitle}</h2>
-          <div className="collection-item col-md-12 col-xs-12">
+      var uniqueId = this.state.uniqueId;
+      var headingId = "heading" + uniqueId;
+      var anchorId = "#" + uniqueId;
+      return (<div className="row panel-heading" role="tab" id={headingId}>
+         <h2 className="title panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#collections" href={anchorId} aria-expanded="false" aria-controls={uniqueId}>
+            {this.state.sheetTitle}
+          </a>
+         </h2>
+        
+
+          <div id={uniqueId} className="collection-item col-md-12 col-xs-12 panel-collapse collapse" role="tabpanel" aria-labelledby={headingId}>
             <CollectionItem sourcePath={this.state.sourcePath} sheetTitle={this.state.sheetTitle} />
           </div>
         </div>);
@@ -42,12 +51,15 @@ var Collection = React.createClass({
 
   // Get the title of the sheet. (Document title is apparently unavailable.)
   buildSheetMetadata: function(result) {
+    var uniqueId = this.generateShortGUID();
+
     if (result.data !== undefined && result.data !== null && result.data.board !== null) {
       return {
         sheetTitle: result.data.board.name,
         sheetDescription: result.data.board.description,
         author_name: result.data.user.full_name,
         rowCount: result.data.board.pin_count,
+        uniqueId: uniqueId,
       };
     }
     else {
@@ -58,8 +70,20 @@ var Collection = React.createClass({
         source_updated_at: result.feed.updated.$t,
         rowCount: result.feed.gs$rowCount.$t,
         colCount: result.feed.gs$colCount.$t,
+        uniqueId: uniqueId,
       };
     }
+  },
+
+  generateShortGUID: function() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    // longGUID =  s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    var shortGUID =  s4() + s4() + s4() + s4();
+    return shortGUID
   },
 
   componentDidMount: function() {
@@ -76,7 +100,7 @@ var Collection = React.createClass({
       success: function(result) {
         if (this.isMounted()) {
           // Get sheet metadata.
-          var metadata = this.buildSheetMetadata(result);          
+          var metadata = this.buildSheetMetadata(result);
           this.setState(metadata);
           this.setState({sourcePath: sourcePath});
           this.forceUpdate();
