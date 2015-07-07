@@ -6,8 +6,18 @@ var Collections = React.createClass({
         {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
         // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'}
       ],
-      storedCollections: [],
     };
+  },
+
+  propTypes: {
+    count: function(props, propName) {
+      if (typeof props[propName] !== number) {
+        return new Error('Count property must be a number.')
+      }
+      if (props[propName] > 100 ) {
+        return new Error('Limited to 100 records.')
+      }
+    }
   },
 
   // gdoc_link_google_sheet_key_value: 'https://docs.google.com/spreadsheets/d/114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw/edit#gid=0'
@@ -16,7 +26,8 @@ var Collections = React.createClass({
     return {
       google_sheet_key_value: "1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII",
       pinboard_name_value: undefined,
-      pinboard_username_value: undefined
+      pinboard_username_value: undefined,
+      storedCollections: [],
     };
   },
 
@@ -24,12 +35,10 @@ var Collections = React.createClass({
     // Get current data object for collections.
     this.loadStoredCollections();
 
-    if (this.props.storedCollections !== undefined && this.props.storedCollections.length > 0 &&  this.props.storedCollections !== null) {
+    if (this.state.storedCollections !== undefined && this.state.storedCollections.length > 0 &&  this.state.storedCollections !== null) {
       return (<div className="row">
-          <h2 className="title">My What Should I ____? Lists</h2>
-
           <div className="row">
-            {this.props.storedCollections.map(this.eachCollection)}
+            {this.state.storedCollections.map(this.eachCollection)}
           </div>
           <div className="row">
             {this.createForm()}
@@ -39,7 +48,7 @@ var Collections = React.createClass({
     }
     else {
         return (<div className="row">
-          <h2 className="title">Lists</h2>
+          <h2 className="title">What Should I ____ ?</h2>
           Add some Google Sheets or Pinterest boards.
 
           {this.createForm()}
@@ -48,17 +57,32 @@ var Collections = React.createClass({
       ); 
     }
   },
-
+// {this.getComponent.bind(this, 1)}
   eachCollection: function(collection, i) {
     if (collection !== null) {
       return (<div className="collection panel panel-default col-md-12 col-xs-12">
-          <Collection collection={collection} key={collection.key} onChange={this.update} index={i} onRemove={this.remove} />
-          {this.addCollectionControls()}
+          <Collection collection={collection} key={collection.key} index={i} />
+          <button className="btn btn-xs" onClick={this.remove} ><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
       </div>);
     }
     else {
       return;
     }
+  },
+
+  remove: function(a,b,c,i) {
+    console.log("remove");
+    console.log (a, b, c, i);
+    console.log(this);
+
+    // this.onRemove(this.props.index);
+    // var data = this.state.storedCollections;
+    // console.log(data);
+    // console.log(data.length);
+    // data.splice(i,1);
+    // console.log(data);
+    // console.log(data.length);
+    // this.forceUpdate();
   },
 
   createForm: function() {
@@ -87,11 +111,11 @@ var Collections = React.createClass({
     return (<div><button className="btn btn-group glyphicon glyphicon-ok" onClick={this.add} /></div>);
   },
 
-  addCollectionControls: function() {
-    return (<div><button className="btn btn-xs"><span className="glyphicon glyphicon-remove" aria-hidden="true" onClick={this.remove}></span></button></div>);
-  },
 
-  add: function() {
+
+  add: function(i) {
+    console.log(i);
+    console.log(this.refs);
     console.log("save");
     // this.props.onChange(this.refs.somevalue.getDOMNode().value, this.props.index);
     // @TODO change the way the keys are validated. Match hashes.
@@ -108,29 +132,14 @@ var Collections = React.createClass({
     // Set up or update the data object.
     this.loadStoredCollections();
     // Add value to the data object.
-    this.props.storedCollections.push(newCollection);
+    this.state.storedCollections.push(newCollection);
     this.setHTML5LocalStorage();
 
     // Make displays render again.
     this.forceUpdate();
   },
 
-  update: function () {
-    console.log("update");
-  },
 
-  remove: function (i) {
-    console.log("remove");
-    console.log(this.props);
-    // this.props.onRemove(this.props.index);
-    // var data = this.props.storedCollections;
-    // console.log(data);
-    // console.log(data.length);
-    // data.splice(i,1);
-    // console.log(data);
-    // console.log(data.length);
-    // this.forceUpdate();
-  },
 
   loadStoredCollections: function() {
     // Get data from storage
@@ -138,11 +147,11 @@ var Collections = React.createClass({
     
     // If data exists, use it for the main data object.
     if ( this.props.HTML5LocalStorage !== undefined && this.props.HTML5LocalStorage !== null) {
-      this.props.storedCollections = this.props.HTML5LocalStorage;
+      this.state.storedCollections = this.props.HTML5LocalStorage;
     }
     else {
       // If not, use data from the defaults.
-      this.props.storedCollections = this.props.defaultCollections;
+      this.state.storedCollections = this.props.defaultCollections;
     }
 
     // Update the localStorage setting.
@@ -170,7 +179,7 @@ var Collections = React.createClass({
     if (typeof localStorage === 'object') {
         try {
             // sessionStorage.removeItem('whatshould_local_paths');
-            localStorage.setItem("whatshould_local_paths", JSON.stringify(this.props.storedCollections));
+            localStorage.setItem("whatshould_local_paths", JSON.stringify(this.state.storedCollections));
             
         } catch (e) {
             Storage.prototype._setItem = Storage.prototype.setItem;
@@ -196,7 +205,7 @@ var Collections = React.createClass({
 
   keyExists: function(key) {
     var exists = false;
-    this.props.storedCollections.map(function(sc){
+    this.state.storedCollections.map(function(sc){
       if (key == sc.key) {
         exists = true;
       }

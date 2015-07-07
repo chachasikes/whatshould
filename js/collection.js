@@ -27,6 +27,10 @@ var Collection = React.createClass({
   },
 
   render: function() {
+    return this.renderDisplay();
+  },
+
+  renderDisplay: function() {
     if (this.props.collection.active === true && this.props.collection.current === true && this.state.sourcePath !== undefined) {
       var uniqueId = this.state.uniqueId;
       var headingId = "heading" + uniqueId;
@@ -41,7 +45,8 @@ var Collection = React.createClass({
           <div id={uniqueId} className="collection-item col-md-12 col-xs-12 panel-collapse collapse" role="tabpanel" aria-labelledby={headingId}>
             <CollectionItem sourcePath={this.state.sourcePath} sheetTitle={this.state.sheetTitle} />
           </div>
-        </div>);
+        </div>
+        );
     }
     else {
       return ( <div className="row">
@@ -50,6 +55,15 @@ var Collection = React.createClass({
       </div>
       );
     }
+  },
+
+
+  renderForm: function() {
+    return (<div><button className="btn btn-xs" onClick={this.remove}><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button></div>);
+  },
+
+  remove: function() {
+    console.log("removing");
   },
 
   // @TODO untested
