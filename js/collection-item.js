@@ -1,83 +1,6 @@
 // Load a Google Sheet and process results as a randomly selected item from a Collection.
 var CollectionItem = React.createClass({
-  // isPinterestBoard: function(results){
-  //   if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined) {
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // },
-
- // Depending on the type of display (grouped or ungrouped), provide markup.
-  render: function() {
-    var results = this.state.displayItems;
-  
-    if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined && this.state.isPinterestBoard == false) {
-      return (
-
-
-          <div className="row">
-            
-            {results[0]['values'].map(function(result) {
-                // @TODO check props settings here for how to use React  -- type={result.label} 
-                //  style={results[0]['hexColor']} how to do inline styles?
-                // https://github.com/FormidableLabs/radium, https://github.com/js-next/react-style
-                return <div className="record col-md-4 col-xs-12">
-                    <div className="card">
-                      <div className="card-label">{result.label}</div>
-                      <div className="card-content">{result.content}</div>
-                    </div>
-                  </div>; 
-            })}
-          </div>
-      );
-    }
-    else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
-        return (
-            <div className="row">
-              
-              {results['values'].map(function(result) {
-                  // @TODO check props settings here for how to use React  -- type={result.label} 
-
-                return <div className="record col-md-4 col-xs-12">
-                  <div className="card">
-                    <div className="card-label">{result.label}</div>
-                    <div className="card-content">{result.content}</div>
-                    </div>
-                  </div>;  
-              })}
-            </div>
-          );
-    }
-    else if (this.state.isPinterestBoard === true && results !== undefined && results[0] !== undefined ) {
-
-        return (
-            <div className="row">
-              
-              {results.map(function(result) {
-                  // @TODO check props settings here for how to use React  -- type={result.label} 
-
-                return <div className="record col-md-4 col-xs-12">
-                  <div className="card">
-                      <div className="card-content"><a href={result['link']}>  <img src={result['image']['url']} /> </a></div>
-                      <div className="card-label">{result['content']}</div>
-                    </div>
-                  </div>;  
-              })}
-            </div>
-          );
-    }
-    else {
-          return (
-            <div>
-              No results yet... loading.
-            </div>
-          );
-    }
-   
-  },
-
+  // Depending on the type of display (grouped or ungrouped), provide markup.
   // Establish initial state settings for this class.
   getInitialState: function() {
     return {
@@ -90,7 +13,6 @@ var CollectionItem = React.createClass({
       isPinterestBoard: false,
     };
   },
-
 
   // If Google Sheet loads, process the results.
   componentDidMount: function() {
@@ -105,7 +27,7 @@ var CollectionItem = React.createClass({
           // Read column names to determine how to handle the Sheet.
           columnState = this.readSheetHeaderColumns(result);
           this.setState(columnState);
-          
+
           // If sheet should be grouped into rows, process as grouped.
           if (this.state.isPinterestBoard === false ) {
             if (this.state.groupColumns == true) {
@@ -127,13 +49,76 @@ var CollectionItem = React.createClass({
     });
   },
 
+  render: function() {
+    var results = this.state.displayItems;
 
+    if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined && this.state.isPinterestBoard == false) {
+      return (
+          <div className="row">
 
-  // Find the first column and first row data from Google Sheet JSON object. 
+            {results[0]['values'].map(function(result) {
+                // @TODO check props settings here for how to use React  -- type={result.label}
+                //  style={results[0]['hexColor']} how to do inline styles?
+                // https://github.com/FormidableLabs/radium, https://github.com/js-next/react-style
+                return <div className="record col-md-4 col-xs-12">
+                    <div className="card">
+                      <div className="card-label">{result.label}</div>
+                      <div className="card-content">{result.content}</div>
+                    </div>
+                  </div>;
+            })}
+          </div>
+      );
+    }
+    else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
+        return (
+            <div className="row">
+
+              {results['values'].map(function(result) {
+                  // @TODO check props settings here for how to use React  -- type={result.label}
+
+                return <div className="record col-md-4 col-xs-12">
+                  <div className="card">
+                    <div className="card-label">{result.label}</div>
+                    <div className="card-content">{result.content}</div>
+                    </div>
+                  </div>;
+              })}
+            </div>
+          );
+    }
+    else if (this.state.isPinterestBoard === true && results !== undefined && results[0] !== undefined ) {
+
+        return (
+            <div className="row">
+
+              {results.map(function(result) {
+                  // @TODO check props settings here for how to use React  -- type={result.label}
+
+                return <div className="record col-md-4 col-xs-12">
+                  <div className="card">
+                      <div className="card-content"><a href={result['link']}>  <img src={result['image']['url']} /> </a></div>
+                      <div className="card-label">{result['content']}</div>
+                    </div>
+                  </div>;
+              })}
+            </div>
+          );
+    }
+    else {
+      return (
+        <div>
+          No results yet... loading.
+        </div>
+      );
+    }
+  },
+
+  // Find the first column and first row data from Google Sheet JSON object.
   // Return updated state settings based on information about the columns.
   readSheetHeaderColumns: function(result) {
 
-    // Find the first column and first row data from Google Sheet JSON object. 
+    // Find the first column and first row data from Google Sheet JSON object.
     // Get column header list as an array.
     // Evaluate columns for certain string matches (hex_color, multi_column)
     // Hexcolor can be a 6 string hex code, with or without a #.
@@ -141,8 +126,6 @@ var CollectionItem = React.createClass({
     // @TODO Think of a better word than "multi_column."
     // Return some local state settings to be stored with the Class.
 
-
-    
     var state = {};
     // Set local variable for data from Google Sheet.
     if (result.data !== undefined && result.data !== null && result.data.board !== null) {
@@ -160,14 +143,14 @@ var CollectionItem = React.createClass({
 
 
       // If hasColor, get the hex Color for this row and store it with this value.
-      if ( $.inArray('hex_color', columnNames)  > -1 ){ 
+      if ( $.inArray('hex_color', columnNames)  > -1 ){
         state.hasHexColor = true;
       }
-      
-      if ( $.inArray('multi_column', columnNames) > -1 ) { 
+
+      if ( $.inArray('multi_column', columnNames) > -1 ) {
         state.groupColumns = false;
       }
-      
+
       return state;
     }
   },
@@ -176,7 +159,7 @@ var CollectionItem = React.createClass({
   mapPinterestBoard: function(result) {
     lastSheet = [];
     displayItems = [];
-    
+
     // Set local variable for data from Google Sheet.
     var pinResults = result.data.pins;
 
@@ -187,14 +170,14 @@ var CollectionItem = React.createClass({
 
     for (var i=0;i<pinCount;i++){
       randomItem = this.getRandomPinItem(pinResults);
-      displayItems.push(randomItem);  
+      displayItems.push(randomItem);
     }
-    
+
     state = {
       sheetArray: lastSheet,
       displayItems: displayItems
     }
-    
+
     return state;
   },
 
@@ -203,7 +186,7 @@ var CollectionItem = React.createClass({
   mapSheetColumnsGrouped: function(result) {
     lastSheet = [];
     displayItems = [];
-    
+
     // Set local variable for data from Google Sheet.
     var lastSheetResults = result.feed.entry;
     var rows = [];
@@ -230,14 +213,14 @@ var CollectionItem = React.createClass({
       sheetArray: lastSheet,
       displayItems: displayItems
     }
-    
+
     return state;
   },
 
   // Process the feed from Google Sheets and cluster cell data into column objects.
   mapSheetColumnsUngrouped: function(result) {
     lastSheet = [];
-    
+
     // Set local variable for data from Google Sheet.
     var lastSheetResults = result.feed.entry;
     var content = {
@@ -264,7 +247,7 @@ var CollectionItem = React.createClass({
           if (columnKey['content']['$t'] !== 'hex_color') {
             content['values'].push(randomItem);
           }
-          
+
         }
       }
     }
@@ -293,7 +276,7 @@ var CollectionItem = React.createClass({
   getRandomRowItem: function(columnHeaders, rows) {
     var randomRowNumber = Math.floor(Math.random()*rows.length);
     var randomItem = rows[randomRowNumber];
-    
+
     content = {
       type: 'grouped',
       values: [],
@@ -302,19 +285,19 @@ var CollectionItem = React.createClass({
 
     for (var i=0; i< randomItem.length; i++) {
       var item = {};
-      
+
 
       item['label'] = columnHeaders[i]['content']['$t'];
       item['content'] = randomItem[i]['content']['$t'];
       item['id'] = randomRowNumber;
-      
+
       if (columnHeaders[i]['content']['$t'] === "hex_color") {
        content.hexColor = "#" + randomItem[i]['content']['$t']; // @TODO add cleanup hex value function.
       }
       else {
-        content.values.push(item);      
+        content.values.push(item);
       }
     }
     return content;
-  }, 
+  },
 });

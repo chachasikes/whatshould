@@ -1,7 +1,31 @@
+// Process metadata about a collection and render display of a collection. 
+// If collection is set to active and current, trigger Collection Item to build and render.
 var Collection = React.createClass({
   getInitialState: function() {
     return {};
   },
+  
+  componentDidMount: function() {
+    if (this.props.collection.key !== undefined) {
+      var sourcePath = this.getSourcePath(this.props.collection);
+    }
+    
+    // Load Google Sheet.
+    $.ajax({
+      url: sourcePath,
+      success: function(result) {
+        if (this.isMounted()) {
+          // Get sheet metadata.
+          var metadata = this.buildSheetMetadata(result);
+          this.setState(metadata);
+          this.setState({sourcePath: sourcePath});
+          this.forceUpdate();
+        }
+      }.bind(this),
+      dataType: 'jsonp',
+    });
+  },
+
   render: function() {
     if (this.props.collection.active === true && this.props.collection.current === true && this.state.sourcePath !== undefined) {
       var uniqueId = this.state.uniqueId;
@@ -13,7 +37,6 @@ var Collection = React.createClass({
             {this.state.sheetTitle}
           </a>
          </h2>
-        
 
           <div id={uniqueId} className="collection-item col-md-12 col-xs-12 panel-collapse collapse" role="tabpanel" aria-labelledby={headingId}>
             <CollectionItem sourcePath={this.state.sourcePath} sheetTitle={this.state.sheetTitle} />
@@ -46,7 +69,6 @@ var Collection = React.createClass({
     else if (collection.key.type === "pinterest") {
       return "https://api.pinterest.com/v3/pidgets/boards/" + collection.key.username + "/" + collection.key.boardname + "/pins/";
     }
-    
   },
 
   // Get the title of the sheet. (Document title is apparently unavailable.)
@@ -85,56 +107,4 @@ var Collection = React.createClass({
     var shortGUID =  s4() + s4() + s4() + s4();
     return shortGUID
   },
-
-  componentDidMount: function() {
-
-    if (this.props.collection.key !== undefined) {
-      console.log(this.props.collection);
-      var sourcePath = this.getSourcePath(this.props.collection);
-      console.log(sourcePath);
-    }
-    
-    // Load Google Sheet.
-    $.ajax({
-      url: sourcePath,
-      success: function(result) {
-        if (this.isMounted()) {
-          // Get sheet metadata.
-          var metadata = this.buildSheetMetadata(result);
-          this.setState(metadata);
-          this.setState({sourcePath: sourcePath});
-          this.forceUpdate();
-        }
-      }.bind(this),
-      dataType: 'jsonp',
-    });
-  },
-
-
-
-  // unload: function() {
-
-  // },
-
-  // copyLink: function() {
-
-  // },
-
-  // editSource: function() {
-
-  // },
-
-  // isValidSheet: function() {
-
-  // },
-
-  // getMetaData: function() {
-
-  // },
-
-  // store: function() {
-
-  // },
-
-
 });
