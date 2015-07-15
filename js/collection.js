@@ -57,15 +57,6 @@ var Collection = React.createClass({
     }
   },
 
-
-  renderForm: function() {
-    return (<div><button className="btn btn-xs" onClick={this.remove}><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button></div>);
-  },
-
-  remove: function() {
-    console.log("removing");
-  },
-
   // @TODO untested
   getSourceEditPath: function(collection) {
     if (collection.key.type == "googleSheet") {

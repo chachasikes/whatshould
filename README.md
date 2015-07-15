@@ -14,6 +14,8 @@ Some people use google docs as a way to keep an ongoing list of ideas to remembe
 There also is a cool game my friend told me about, which involves generating ideas for making repeat patterns. This game requires 5+ column types, so that's the real motivation behind this app. I orginally wrote eveything on little paper cards and put them in cups, but the cups were taking up a lot of space and still required a good 30 minutes of visual research on the internet. So eventually the goal will be to include visual material from pre-selected Pinboards, so that most of the work can be done from a phone and from wherever.
 
 
+https://docs.google.com/spreadsheets/d/1FPefy-GxbVtD9osXviZTudATTYwNW0QCOI0CWApGEpw/pub?output=csv
+
 -Chacha @chachasikes
 
 ### Designs
@@ -69,6 +71,9 @@ You can have two kinds of spreadsheets:
 
 
 #### Features in progress
+- issue with setState and mutability, also issue with this.setState not setting. (http://stackoverflow.com/questions/24718709/reactjs-does-render-get-called-any-time-setstate-is-called, http://jaketrent.com/post/set-state-in-callbacks-in-react/)
+- is it possible to load a public folder of google sheets? (has to use google drive: https://docs.google.com/document/d/1WgI8GMo47XU-RWgkDf4_m7P5hiTkiTCc4t06V9WIK2E/edit, )
+- will shortened urls to google docs load via ajax?
 - prioritize most basic editing features for google sheet path
 - Create form element to load google sheet path
 - Parse google sheet path to get the key
@@ -84,7 +89,7 @@ You can have two kinds of spreadsheets:
 - figure out where to put a string processing function to clean up hex values.
 - figure out how to make React interpret inline styles.
 
-#### Future Features
+#### Future Features/Ideas/Requests
 Eventually, you will be able to have:
 - a bunch of lists of lists to choose from (probably)
 - See the hex_color value for a row (eventually)
@@ -99,6 +104,10 @@ Eventually, you will be able to have:
 - allow images from full links via google doc (maybe)
 - add a button that reloads the whole google doc
 - way later: add in-app content entry (no google docs) (maybe)
+- twitter favorites
+- liked pins
+- idea: make the frontend easily themeable if forked
+
 
 ### Technology
 The purpose of the technology choices for this app will be to play with some new JS frameworks. 
