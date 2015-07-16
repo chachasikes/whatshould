@@ -20,22 +20,7 @@ var gulp = require('gulp'),
     del = require('del'),
     jasmine = require('gulp-jasmine'),
     jasmine_node = require('jasmine-node'),
-    // jasmineBrowser = require('gulp-jasmine-browser'),
     reporters = require('jasmine-reporters');
-    // source = require('vinyl-source-stream'),
-    // browserify = require('browserify'),
-    // watchify = require('watchify'),
-    // reactify = require('reactify'), 
-    // gulpif = require('gulp-if'),
-    // streamify = require('gulp-streamify'),
-    // notify = require('gulp-notify'),
-    // cssmin = require('gulp-cssmin'),
-    // gutil = require('gulp-util'),
-    // shell = require('gulp-shell'),
-    // glob = require('glob'),
-
-    // jasminePhantomJs = require('gulp-jasmine2-phantomjs')
-
 
 // Styles
 gulp.task('styles', function() {
@@ -71,13 +56,6 @@ gulp.task('images', function() {
     .pipe(gulp.dest('dist/images/'))
     .pipe(notify({ message: 'Images task complete' }));
 });
- 
-// gulp.task('specs', function() {
-//   return gulp.src('src/spec/**/*')
-//     .pipe(gulp.dest('dist/spec'))
-//     .pipe(notify({ message: 'Specs task complete' }));
-// });
-
 
 // Clean
 gulp.task('clean', function(cb) {
@@ -86,19 +64,6 @@ gulp.task('clean', function(cb) {
  
 // Default task
 gulp.task('default', ['clean'], function() {
-
-  // browserifyTask({
-  //   development: true,
-  //   src: './src/main.js',
-  //   dest: './dist/'
-  // });
-  
-  // cssTask({
-  //   development: true,
-  //   src: './styles/**/*.css',
-  //   dest: './dist'
-  // });
-
   gulp.start('styles', 'scripts', 'images');
 });
  
@@ -123,6 +88,39 @@ gulp.task('watch', function() {
 });
 
 // Gulp reference
+
+// jasmineBrowser = require('gulp-jasmine-browser'),
+// source = require('vinyl-source-stream'),
+// browserify = require('browserify'),
+// watchify = require('watchify'),
+// reactify = require('reactify'), 
+// gulpif = require('gulp-if'),
+// streamify = require('gulp-streamify'),
+// notify = require('gulp-notify'),
+// cssmin = require('gulp-cssmin'),
+// gutil = require('gulp-util'),
+// shell = require('gulp-shell'),
+// glob = require('glob'),
+
+// jasminePhantomJs = require('gulp-jasmine2-phantomjs')
+
+// browserifyTask({
+//   development: true,
+//   src: './src/main.js',
+//   dest: './dist/'
+// });
+
+// cssTask({
+//   development: true,
+//   src: './styles/**/*.css',
+//   dest: './dist'
+// });
+
+// gulp.task('specs', function() {
+//   return gulp.src('src/spec/**/*')
+//     .pipe(gulp.dest('dist/spec'))
+//     .pipe(notify({ message: 'Specs task complete' }));
+// });
 
 // gulp.watch(['spec/**', 'spec/**/**']).on('change', redoTests);
 
