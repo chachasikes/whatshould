@@ -19,21 +19,184 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     del = require('del'),
     jasmine = require('gulp-jasmine'),
-    jasmineBrowser = require('gulp-jasmine-browser'),
-    reporters = require('jasmine-reporters'),
-    source = require('vinyl-source-stream'),
-    browserify = require('browserify'),
-    watchify = require('watchify'),
-    reactify = require('reactify'), 
-    gulpif = require('gulp-if'),
-    streamify = require('gulp-streamify'),
-    notify = require('gulp-notify'),
-    cssmin = require('gulp-cssmin'),
-    gutil = require('gulp-util'),
-    shell = require('gulp-shell'),
-    glob = require('glob'),
     jasmine_node = require('jasmine-node'),
-    jasminePhantomJs = require('gulp-jasmine2-phantomjs');
+    // jasmineBrowser = require('gulp-jasmine-browser'),
+    reporters = require('jasmine-reporters');
+    // source = require('vinyl-source-stream'),
+    // browserify = require('browserify'),
+    // watchify = require('watchify'),
+    // reactify = require('reactify'), 
+    // gulpif = require('gulp-if'),
+    // streamify = require('gulp-streamify'),
+    // notify = require('gulp-notify'),
+    // cssmin = require('gulp-cssmin'),
+    // gutil = require('gulp-util'),
+    // shell = require('gulp-shell'),
+    // glob = require('glob'),
+
+    // jasminePhantomJs = require('gulp-jasmine2-phantomjs')
+
+
+// Styles
+gulp.task('styles', function() {
+  return sass('src/styles/css/style.scss')
+    .pipe(autoprefixer('last 2 version'))
+    // .pipe(sass({sourcemap: true, sourcemapPath: './sass/'}))
+    .on('error', function (err) { console.log(err.message); })
+    .pipe(minifycss())
+    .pipe(gulp.dest('dist/styles/css'))
+    .pipe(notify({ message: 'Styles task complete' }));
+});
+
+// Scripts
+gulp.task('scripts', function() {
+  return gulp.src('src/scripts/**/*.js')
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'))
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(rename({ suffix: '.min' }))
+    // .pipe(uglify())  // crashes - uglify error.
+    // .on('error', function(){
+    //   //do whatever here
+    // })
+    .pipe(gulp.dest('dist/scripts'))
+    .pipe(notify({ message: 'Scripts task complete' }));
+});
+ 
+// Images
+gulp.task('images', function() {
+  return gulp.src('src/images/**/*')
+    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
+    .pipe(gulp.dest('dist/images/'))
+    .pipe(notify({ message: 'Images task complete' }));
+});
+ 
+// gulp.task('specs', function() {
+//   return gulp.src('src/spec/**/*')
+//     .pipe(gulp.dest('dist/spec'))
+//     .pipe(notify({ message: 'Specs task complete' }));
+// });
+
+
+// Clean
+gulp.task('clean', function(cb) {
+    del(['dist/styles/css', 'dist/scripts/js', 'dist/images/img'], cb)
+});
+ 
+// Default task
+gulp.task('default', ['clean'], function() {
+
+  // browserifyTask({
+  //   development: true,
+  //   src: './src/main.js',
+  //   dest: './dist/'
+  // });
+  
+  // cssTask({
+  //   development: true,
+  //   src: './styles/**/*.css',
+  //   dest: './dist'
+  // });
+
+  gulp.start('styles', 'scripts', 'images');
+});
+ 
+// Watch
+gulp.task('watch', function() {
+ 
+  // Watch .scss files
+  gulp.watch('src/styles/**/*.scss', ['styles']);
+ 
+  // Watch .js files
+  gulp.watch('src/scripts/**/*.js', ['scripts']);
+ 
+  // Watch image files
+  gulp.watch('src/images/**/*', ['images']);
+ 
+  // Create LiveReload server
+  livereload.listen();
+
+  // Watch any files in dist/, reload on change
+  gulp.watch(['dist/**', 'dist/**/**']).on('change', livereload.changed)
+
+});
+
+// Gulp reference
+
+// gulp.watch(['spec/**', 'spec/**/**']).on('change', redoTests);
+
+
+// function redoTests() {
+//   console.log("Run Tests");
+//   gulp.src('spec/test/test.spec.js')
+//     .pipe(jasmine({
+//         reporter: new reporters.JUnitXmlReporter()
+//     }));
+// }
+
+
+// gulp.task('test', function () {
+//     return gulp.src('spec/tests/test.spec.js')
+//         .pipe(jasmine({
+//             reporter: new reporters.JUnitXmlReporter()
+//         }));
+// });
+
+
+
+// gulp.task('deploy', function () {
+
+//   browserifyTask({
+//     development: false,
+//     src: './src/main.js',
+//     dest: './dist/'
+//   });
+  
+//   cssTask({
+//     development: false,
+//     src: './styles/**/*.css',
+//     dest: './dist'
+//   });
+
+// });
+
+// Runs the test with phantomJS and produces XML files
+// that can be used with f.ex. jenkins
+// gulp.task('test', function () {
+//     return gulp.src('./dist/spec/testrunner-phantomjs.html')
+//       .pipe(jasminePhantomJs());
+// });
+
+
+  // return gulp.src('src/scripts/**/*.js')
+  //   .pipe(jshint('.jshintrc'))
+  //   .pipe(jshint.reporter('default'))
+  //   .pipe(concat('app.js'))
+  //   .pipe(gulp.dest('dist/scripts'))
+  //   .pipe(rename({ suffix: '.min' }))
+  //   // .pipe(uglify())  // crashes - uglify error.
+  //   // .on('error', function(){
+  //   //   //do whatever here
+  //   // })
+  //   .pipe(gulp.dest('dist/scripts'))
+  //   .pipe(notify({ message: 'Scripts task complete' }));
+
+
+// gulp.task('jasmine', function() {
+//   var filesForTest = [ 'src/spec/*.js','src/spec/**/*.js', 'src/spec/*.spec.js','src/spec/**/*.spec.js'];
+//   return gulp.src(filesForTest)
+//     .pipe(gulp.watch(filesForTest))
+//     .pipe(jasmineBrowser.specRunner())
+//     .pipe(jasmineBrowser.server({port: 8888}));
+// });
+
+// gulp.task('jasmine-phantom', function() {
+//   var filesForTest = [ 'src/spec/*.js','src/spec/**/*.js', 'src/spec/*.spec.js','src/spec/**/*.spec.js'];
+//   return gulp.src(filesForTest)
+//     .pipe(jasmineBrowser.specRunner({console: true}))
+//     .pipe(jasmineBrowser.headless());
+// });
 
 
 // We create an array of dependencies. These are NPM modules you have
@@ -174,166 +337,3 @@ var gulp = require('gulp'),
 //     }
 // }
 
-
-
-
-// Styles
-gulp.task('styles', function() {
-  return sass('src/styles/css/style.scss')
-    .pipe(autoprefixer('last 2 version'))
-    // .pipe(sass({sourcemap: true, sourcemapPath: './sass/'}))
-    .on('error', function (err) { console.log(err.message); })
-    .pipe(minifycss())
-    .pipe(gulp.dest('dist/styles/css'))
-    .pipe(notify({ message: 'Styles task complete' }));
-});
-
-// Scripts
-gulp.task('scripts', function() {
-  return gulp.src('src/scripts/**/*.js')
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
-    .pipe(concat('app.js'))
-    .pipe(gulp.dest('dist/scripts'))
-    .pipe(rename({ suffix: '.min' }))
-    // .pipe(uglify())  // crashes - uglify error.
-    // .on('error', function(){
-    //   //do whatever here
-    // })
-    .pipe(gulp.dest('dist/scripts'))
-    .pipe(notify({ message: 'Scripts task complete' }));
-});
- 
-// Images
-gulp.task('images', function() {
-  return gulp.src('src/images/**/*')
-    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('dist/images/'))
-    .pipe(notify({ message: 'Images task complete' }));
-});
- 
-// gulp.task('specs', function() {
-//   return gulp.src('src/spec/**/*')
-//     .pipe(gulp.dest('dist/spec'))
-//     .pipe(notify({ message: 'Specs task complete' }));
-// });
-
-
-// Clean
-gulp.task('clean', function(cb) {
-    del(['dist/styles/css', 'dist/scripts/js', 'dist/images/img'], cb)
-});
- 
-// Default task
-gulp.task('default', ['clean'], function() {
-
-  // browserifyTask({
-  //   development: true,
-  //   src: './src/main.js',
-  //   dest: './dist/'
-  // });
-  
-  // cssTask({
-  //   development: true,
-  //   src: './styles/**/*.css',
-  //   dest: './dist'
-  // });
-
-  gulp.start('styles', 'scripts', 'images');
-});
- 
-
-
-// gulp.task('deploy', function () {
-
-//   browserifyTask({
-//     development: false,
-//     src: './src/main.js',
-//     dest: './dist/'
-//   });
-  
-//   cssTask({
-//     development: false,
-//     src: './styles/**/*.css',
-//     dest: './dist'
-//   });
-
-// });
-
-// Runs the test with phantomJS and produces XML files
-// that can be used with f.ex. jenkins
-// gulp.task('test', function () {
-//     return gulp.src('./dist/spec/testrunner-phantomjs.html')
-//       .pipe(jasminePhantomJs());
-// });
-
-
-  // return gulp.src('src/scripts/**/*.js')
-  //   .pipe(jshint('.jshintrc'))
-  //   .pipe(jshint.reporter('default'))
-  //   .pipe(concat('app.js'))
-  //   .pipe(gulp.dest('dist/scripts'))
-  //   .pipe(rename({ suffix: '.min' }))
-  //   // .pipe(uglify())  // crashes - uglify error.
-  //   // .on('error', function(){
-  //   //   //do whatever here
-  //   // })
-  //   .pipe(gulp.dest('dist/scripts'))
-  //   .pipe(notify({ message: 'Scripts task complete' }));
-
-
-// gulp.task('jasmine', function() {
-//   var filesForTest = [ 'src/spec/*.js','src/spec/**/*.js', 'src/spec/*.spec.js','src/spec/**/*.spec.js'];
-//   return gulp.src(filesForTest)
-//     .pipe(gulp.watch(filesForTest))
-//     .pipe(jasmineBrowser.specRunner())
-//     .pipe(jasmineBrowser.server({port: 8888}));
-// });
-
-// gulp.task('jasmine-phantom', function() {
-//   var filesForTest = [ 'src/spec/*.js','src/spec/**/*.js', 'src/spec/*.spec.js','src/spec/**/*.spec.js'];
-//   return gulp.src(filesForTest)
-//     .pipe(jasmineBrowser.specRunner({console: true}))
-//     .pipe(jasmineBrowser.headless());
-// });
-
-
-// Watch
-gulp.task('watch', function() {
- 
-  // Watch .scss files
-  gulp.watch('src/styles/**/*.scss', ['styles']);
- 
-  // Watch .js files
-  gulp.watch('src/scripts/**/*.js', ['scripts']);
- 
-  // Watch image files
-  gulp.watch('src/images/**/*', ['images']);
- 
-  // Create LiveReload server
-  livereload.listen();
-
-  // Watch any files in dist/, reload on change
-  gulp.watch(['dist/**', 'dist/**/**']).on('change', livereload.changed)
-
-
-  // gulp.watch(['spec/**', 'spec/**/**']).on('change', redoTests);
-
-
-  // function redoTests() {
-  //   console.log("Run Tests");
-  //   gulp.src('spec/test/test.spec.js')
-  //     .pipe(jasmine({
-  //         reporter: new reporters.JUnitXmlReporter()
-  //     }));
-  // }
-
-
-});
-
-// gulp.task('test', function () {
-//     return gulp.src('spec/tests/test.spec.js')
-//         .pipe(jasmine({
-//             reporter: new reporters.JUnitXmlReporter()
-//         }));
-// });
