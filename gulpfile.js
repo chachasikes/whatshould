@@ -20,6 +20,7 @@ var gulp = require('gulp'),
     del = require('del'),
     jasmine = require('gulp-jasmine'),
     jasmineBrowser = require('gulp-jasmine-browser'),
+    reporters = require('jasmine-reporters'),
     source = require('vinyl-source-stream'),
     browserify = require('browserify'),
     watchify = require('watchify'),
@@ -31,6 +32,7 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     shell = require('gulp-shell'),
     glob = require('glob'),
+    jasmine_node = require('jasmine-node'),
     jasminePhantomJs = require('gulp-jasmine2-phantomjs');
 
 
@@ -210,16 +212,16 @@ gulp.task('images', function() {
     .pipe(notify({ message: 'Images task complete' }));
 });
  
-gulp.task('specs', function() {
-  return gulp.src('src/spec/**/*')
-    .pipe(gulp.dest('dist/spec'))
-    .pipe(notify({ message: 'Specs task complete' }));
-});
+// gulp.task('specs', function() {
+//   return gulp.src('src/spec/**/*')
+//     .pipe(gulp.dest('dist/spec'))
+//     .pipe(notify({ message: 'Specs task complete' }));
+// });
 
 
 // Clean
 gulp.task('clean', function(cb) {
-    del(['dist/styles/css', 'dist/scripts/js', 'dist/images/img', 'dist/spec/tests'], cb)
+    del(['dist/styles/css', 'dist/scripts/js', 'dist/images/img'], cb)
 });
  
 // Default task
@@ -237,7 +239,7 @@ gulp.task('default', ['clean'], function() {
   //   dest: './dist'
   // });
 
-  gulp.start('styles', 'scripts', 'images', 'specs');
+  gulp.start('styles', 'scripts', 'images');
 });
  
 
@@ -260,10 +262,10 @@ gulp.task('default', ['clean'], function() {
 
 // Runs the test with phantomJS and produces XML files
 // that can be used with f.ex. jenkins
-gulp.task('test', function () {
-    return gulp.src('./dist/spec/testrunner-phantomjs.html')
-      .pipe(jasminePhantomJs());
-});
+// gulp.task('test', function () {
+//     return gulp.src('./dist/spec/testrunner-phantomjs.html')
+//       .pipe(jasminePhantomJs());
+// });
 
 
   // return gulp.src('src/scripts/**/*.js')
@@ -314,5 +316,24 @@ gulp.task('watch', function() {
   // Watch any files in dist/, reload on change
   gulp.watch(['dist/**', 'dist/**/**']).on('change', livereload.changed)
 
+
+  // gulp.watch(['spec/**', 'spec/**/**']).on('change', redoTests);
+
+
+  // function redoTests() {
+  //   console.log("Run Tests");
+  //   gulp.src('spec/test/test.spec.js')
+  //     .pipe(jasmine({
+  //         reporter: new reporters.JUnitXmlReporter()
+  //     }));
+  // }
+
+
 });
 
+// gulp.task('test', function () {
+//     return gulp.src('spec/tests/test.spec.js')
+//         .pipe(jasmine({
+//             reporter: new reporters.JUnitXmlReporter()
+//         }));
+// });

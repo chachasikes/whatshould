@@ -39,7 +39,7 @@ describe("Server is working.", function() {
 
     it("returns part of Title", function(done) {
       request.get(base_url, function(error, response, body) {
-        expect(body).toMatch("Creative Reminders");
+        expect(body).toMatch("Creative Reminder");
         done();
       });
     });
