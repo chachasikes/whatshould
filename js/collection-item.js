@@ -80,7 +80,7 @@ var CollectionItem = React.createClass({
                 return <div className="record col-md-4 col-xs-12">
                   <div className="card">
                     <div className="card-label">{result.label}</div>
-                    <div className="card-content">{result.content}</div>
+                    <div className="card-content" dangerouslySetInnerHTML={{__html: result.content}}></div>
                     </div>
                   </div>;
               })}
@@ -276,7 +276,7 @@ var CollectionItem = React.createClass({
   getRandomRowItem: function(columnHeaders, rows) {
     var randomRowNumber = Math.floor(Math.random()*rows.length);
     var randomItem = rows[randomRowNumber];
-
+    console.log(randomItem);
     content = {
       type: 'grouped',
       values: [],
@@ -292,7 +292,8 @@ var CollectionItem = React.createClass({
       item['id'] = randomRowNumber;
 
       if (columnHeaders[i]['content']['$t'] === "hex_color") {
-       content.hexColor = "#" + randomItem[i]['content']['$t']; // @TODO add cleanup hex value function.
+       content.hexColor =  randomItem[i]['content']['$t']; // @TODO add cleanup hex value function.
+       console.log(content.hexColor);
       }
       else {
         content.values.push(item);

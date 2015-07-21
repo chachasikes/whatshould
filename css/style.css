@@ -35,6 +35,14 @@ h2 {
   line-height: 1em;
 }
 
+.collection-item .card-content span {
+  margin-top: 5px;
+  padding: 8px;
+  display: block;
+  text-transform: lowercase;
+
+}
+
 #menu-toggle {
   position: absolute;
   left: 0;

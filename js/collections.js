@@ -2,9 +2,8 @@ var Collections = React.createClass({
   getDefaultProps: function() {
     return {
       defaultCollections: [
-        {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
-        {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
-        // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'}
+        // {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
+        {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', active: true, current: true, type: 'googleSheet'}
       ],
     };
   },
@@ -40,9 +39,7 @@ var Collections = React.createClass({
           <div className="row">
             {this.state.storedCollections.map(this.eachCollection)}
           </div>
-          <div className="row">
-            {this.createForm()}
-          </div>
+
         </div>
       );
     }
@@ -58,11 +55,12 @@ var Collections = React.createClass({
     }
   },
 // {this.getComponent.bind(this, 1)}
+// <button className="btn btn-xs" onClick={this.remove} ><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
   eachCollection: function(collection, i) {
     if (collection !== null) {
       return (<div className="collection panel panel-default col-md-12 col-xs-12">
           <Collection collection={collection} key={collection.key} index={i} />
-          <button className="btn btn-xs" onClick={this.remove} ><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+         
       </div>);
     }
     else {
