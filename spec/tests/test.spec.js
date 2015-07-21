@@ -43,5 +43,14 @@ describe("Server is working.", function() {
         done();
       });
     });
+
+    // it("returns part of Body copy", function(done) {
+    //   request.get(base_url, function(error, response, body) {
+    //     expect(body).toMatch("HI");
+    //     done();
+    //   });
+    // });
+
+
   });
 });

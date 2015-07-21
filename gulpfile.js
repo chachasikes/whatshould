@@ -35,11 +35,26 @@ gulp.task('styles', function() {
 
 // Scripts
 gulp.task('scripts', function() {
+
+  gulp.src('src/scripts/main.js')
+    // .pipe(jshint('.jshintrc'))
+    // .pipe(jshint.reporter('default'))
+    // .pipe(concat('app.js'))
+    .pipe(gulp.dest('dist/scripts'))
+    // .pipe(rename({ suffix: '.min' }))
+    // .pipe(uglify())  // crashes - uglify error.
+    // .on('error', function(){
+    //   //do whatever here
+    // })
+    // .pipe(gulp.dest('dist/scripts'))
+    .pipe(notify({ message: 'Scripts task complete' }));
+
+
   return gulp.src('src/scripts/**/*.js')
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(concat('app.js'))
-    .pipe(gulp.dest('dist/scripts'))
+    // .pipe(gulp.dest('dist/scripts'))
     .pipe(rename({ suffix: '.min' }))
     // .pipe(uglify())  // crashes - uglify error.
     // .on('error', function(){
@@ -59,7 +74,7 @@ gulp.task('images', function() {
 
 // Clean
 gulp.task('clean', function(cb) {
-    del(['dist/styles/css', 'dist/scripts/js', 'dist/images/img'], cb)
+    del(['dist/styles/css', 'dist/scripts/js'], cb)
 });
  
 // Default task
