@@ -1,9 +1,14 @@
 // npm install jasmine-node
 // run tests: jasmine-node spec
 
-  // - app page loads at all
-  // - page markup renders
-  // - user can save a path to an api resource
+// done
+// - app page loads at all 
+// - page markup renders
+
+
+// not done
+
+  
   // - when user saves a path, it only saves one record
   // - app can tell what kind of resource it is
   //   - app can extract name and pinboard name
@@ -24,8 +29,14 @@
   // - buttom click handler triggers deletion
 
 
+// http://substantial.com/blog/2014/11/11/test-driven-react-how-to-manually-mock-components/
+// https://github.com/jhnns/rewire
   
 var request = require("request");
+// var Collections = require("../../src/scripts/js/collections.js");
+// var Collection = require("../../src/scripts/js/collection.js");
+// var CollectionItem = require("../../src/scripts/js/collection-item.js");
+
 var base_url = "http://localhost:8000/"
 
 describe("Server is working.", function() {
@@ -54,3 +65,19 @@ describe("Server is working.", function() {
 
   });
 });
+
+describe("User can save a path to a resource.", function() {
+  describe("GET /", function() {
+
+    it("Given a key, save mechanism works", function(done) {
+      request.get(base_url, function(error, response, body) {
+        var sampleKey = "abcdef";
+
+        // expect(response.statusCode).toBe(200);
+        done();
+      });
+    });
+
+  });
+});
+

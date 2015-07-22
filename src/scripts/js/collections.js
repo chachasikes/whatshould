@@ -13,8 +13,8 @@ var Collections = React.createClass({
 
     return {
       defaultCollections: [
-        {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
-        {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
+        // {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
+        // {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
         // {key: {key: '1FPefy-GxbVtD9osXviZTudATTYwNW0QCOI0CWApGEpw', type: 'googleSheet'}, active: true, current: true},
         {key: {key: '1-4Tl0L9OHCU0mFRn_8RJd9PlAMPKP3wMy8GSmvu1X7w', type: 'googleSheet'}, active: true, current: true}
         
@@ -28,7 +28,6 @@ var Collections = React.createClass({
   getInitialState: function () {
     // Get current data object for collections.
     var storedCollection = this.loadStoredCollections();
-
     // Set values for input fields.
     return {
       google_sheet_key_value: undefined,
@@ -69,7 +68,7 @@ var Collections = React.createClass({
   },
 
   render: function() {
-
+    // If we have data for the collections
     if (this.state.storedCollections !== undefined && this.state.storedCollections.length > 0 &&  this.state.storedCollections !== null) {
       return (<div className="row">
           <div className="row">
@@ -98,7 +97,7 @@ var Collections = React.createClass({
   eachCollection: function(collection, i) {
     if (collection !== null) {
       return (<div className="collection panel panel-default col-md-12 col-xs-12">
-          <Collection collection={collection} key={i} key2={collection.key} index={i} />
+          <Collection collection={collection} key={i} data={collection.key} />
 
       </div>);
     }

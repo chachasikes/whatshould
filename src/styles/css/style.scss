@@ -27,6 +27,11 @@ h2 {
   background-color: #eee;
   margin: 20px 0 40px 0;
   padding: 10px;
+  span {
+    display: block;
+    padding: 5px;
+    margin: 10px 0;
+  }
 }
 
 .collection-item .card-label {

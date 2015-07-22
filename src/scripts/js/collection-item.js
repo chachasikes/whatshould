@@ -13,6 +13,13 @@ var CollectionItem = React.createClass({
       isPinterestBoard: false,
     };
   },
+  
+  // componentWillMount: function() {
+  //   this.style = {
+  //     backgroundColor: 'blue',
+  //   };
+
+  // },
 
   // If Google Sheet loads, process the results.
   componentDidMount: function() {
@@ -51,7 +58,6 @@ var CollectionItem = React.createClass({
 
   render: function() {
     var results = this.state.displayItems;
-
     if (this.state.groupColumns == true && results !== undefined && results[0] !== undefined && this.state.isPinterestBoard == false) {
       return (
           <div className="row">
@@ -71,6 +77,8 @@ var CollectionItem = React.createClass({
       );
     }
     else if (this.state.groupColumns == false && results !== undefined && results['values'] !== undefined) {
+
+
         return (
             <div className="row">
 
@@ -80,7 +88,7 @@ var CollectionItem = React.createClass({
                 return <div className="record col-md-4 col-xs-12">
                   <div className="card">
                     <div className="card-label">{result.label}</div>
-                    <div className="card-content">{result.content}</div>
+                    <div className="card-content" dangerouslySetInnerHTML={{__html: result.content}}></div>
                     </div>
                   </div>;
               })}
@@ -251,10 +259,12 @@ var CollectionItem = React.createClass({
         }
       }
     }
+
     state = {
       sheetArray: lastSheet,
       displayItems: content
-    }
+    };
+
     this.setState(state);
   },
 

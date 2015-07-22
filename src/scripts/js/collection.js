@@ -4,7 +4,7 @@ var Collection = React.createClass({
   getInitialState: function() {
     return {};
   },
-  
+
   componentDidMount: function() {
     if (this.props.collection.key !== undefined) {
       var sourcePath = this.getSourcePath(this.props.collection);
@@ -42,7 +42,7 @@ var Collection = React.createClass({
           </a>
          </h2>
 
-          <div id={uniqueId} className="collection-item col-md-12 col-xs-12 panel-collapse collapse" role="tabpanel" aria-labelledby={headingId}>
+          <div id={uniqueId} className="collection-item col-md-12 col-xs-12 panel-collapse" role="tabpanel" aria-labelledby={headingId}>
             <CollectionItem sourcePath={this.state.sourcePath} sheetTitle={this.state.sheetTitle} />
           </div>
         </div>
