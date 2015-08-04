@@ -279,6 +279,13 @@ var CollectionItem = React.createClass({
   getRandomColumnItem: function(columnKey, column) {
     var randomRowNumber = Math.floor(Math.random()*column.length);
     var randomItem = column[randomRowNumber]['content']['$t'];
+    console.log(randomItem);
+
+    // randomItem is an image: 
+    if (randomItem.match( /\.(gif|jpg|jpeg|tiff|png)$/i) ) {
+      randomItem = '<img class="image" src="' + randomItem + '" />';
+    }
+
     return {'content': randomItem, 'id': randomRowNumber, 'label': columnKey['content']['$t']};
   },
 

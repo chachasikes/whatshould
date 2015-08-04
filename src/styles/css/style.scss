@@ -54,6 +54,10 @@ h2 {
 .collection-item .card-content {
   font-size: 3em;
   line-height: 1em;
+
+  .image {
+    width: 300px;
+  }
 }
 
 .collection-item .card-content span {
@@ -62,6 +66,8 @@ h2 {
   display: block;
   text-transform: lowercase;
   color: set-default-span-text-color($default_span_color);
+  padding-top:300px;
+
   strong {
     padding-right: 10px;
   }
