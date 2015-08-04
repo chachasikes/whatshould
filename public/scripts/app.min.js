@@ -70,7 +70,6 @@ var CollectionItem = React.createClass({
                     <div className="card">
                       <div className="card-label">{result.label}</div>
                       <div className="card-content" dangerouslySetInnerHTML={{__html: result.content}}></div>
-
                     </div>
                   </div>;
             })}
