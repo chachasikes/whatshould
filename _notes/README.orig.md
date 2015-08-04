@@ -50,7 +50,7 @@ You can have two kinds of spreadsheets:
   * https://docs.google.com/spreadsheets/d/1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII/edit#gid=0
 
 2. Multiple Column: Where you have a bunch of columns with different lists that should each be presented, but selected from at random (For example, for choosing criteria for planning ideas for designing repeat patterns.) 
-  * To make this work, just add a column header that says "multi_column." You do not need to add any other information to the file.
+  * To make this work, just add a column header that says "use_columns." You do not need to add any other information to the file.
 
   Here are some links to examples: 
 

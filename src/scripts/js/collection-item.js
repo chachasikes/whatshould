@@ -69,7 +69,8 @@ var CollectionItem = React.createClass({
                 return <div className="record col-md-4 col-xs-12">
                     <div className="card">
                       <div className="card-label">{result.label}</div>
-                      <div className="card-content">{result.content}</div>
+                      <div className="card-content" dangerouslySetInnerHTML={{__html: result.content}}></div>
+
                     </div>
                   </div>;
             })}
@@ -128,10 +129,10 @@ var CollectionItem = React.createClass({
 
     // Find the first column and first row data from Google Sheet JSON object.
     // Get column header list as an array.
-    // Evaluate columns for certain string matches (hex_color, multi_column)
+    // Evaluate columns for certain string matches (hex_color, use_columns)
     // Hexcolor can be a 6 string hex code, with or without a #.
-    // multi_column doesn't need any values, just to be listed as a column name and the sheet will be interpreted as each column should be randomized.
-    // @TODO Think of a better word than "multi_column."
+    // use_columns doesn't need any values, just to be listed as a column name and the sheet will be interpreted as each column should be randomized.
+    // @TODO Think of a better word than "use_columns."
     // Return some local state settings to be stored with the Class.
 
     var state = {};
@@ -155,7 +156,7 @@ var CollectionItem = React.createClass({
         state.hasHexColor = true;
       }
 
-      if ( $.inArray('multi_column', columnNames) > -1 ) {
+      if ( $.inArray('use_columns', columnNames) > -1 ) {
         state.groupColumns = false;
       }
 
@@ -308,6 +309,11 @@ var CollectionItem = React.createClass({
       item['label'] = columnHeaders[i]['content']['$t'];
       item['content'] = randomItem[i]['content']['$t'];
       item['id'] = randomRowNumber;
+
+      if (item['content'].match( /\.(gif|jpg|jpeg|tiff|png)$/i) ) {
+        item['content'] = '<img class="image" src="' + item['content'] + '" />';
+      }
+
 
       if (columnHeaders[i]['content']['$t'] === "hex_color") {
        content.hexColor =  randomItem[i]['content']['$t']; // @TODO add cleanup hex value function.

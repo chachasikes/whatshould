@@ -1,66 +1,40 @@
 var Collections = React.createClass({
+
+  
   getDefaultProps: function() {
 
-    // Get htmlstorage as props.
-    var HTML5LocalStorage = localStorage.getItem("whatshould_local_paths");
-
-    function getURLParameter(name) {
+    function getURLParameter (name) {
       return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
     }
 
-
-
-    var googleDocHash = getURLParameter('gdoc');
-    var pinterest_user = getURLParameter('pinterest_user');
-    var pinterest_board = getURLParameter('pinboard');
-
-    
-//http://localhost:7033/?gdoc=1Zjt-QADqUh_uALkR8fNUfyahaVIGw8mTmxDxFG3WMSo&pinterest_user=chachasikes&pinboard=patterns
-    // var storedCollections = [
-    //     {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
-    //     {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
-    //     // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'},
-    //     // {key: '1E949ZFaBbQxiSxBBZMyAIw9KJtHolm0XNsnnQoMjuoM', active: true, current: true, type: 'googleSheet'},
-    // ];
-
-    // 1Zjt-QADqUh_uALkR8fNUfyahaVIGw8mTmxDxFG3WMSo
+    var googleSheet = getURLParameter('google_sheet');
+    var pinterestUser = getURLParameter('pinterest_user');
+    var pinterestBoard = getURLParameter('pinboard');
 
     var collections = {
-      defaultCollections: [
-    
-      ]
-      // HTML5LocalStorage: JSON.parse(HTML5LocalStorage)
+      defaultCollections: []
     };
 
+    if (googleSheet != undefined) {
+      var sheet = {key: {key: googleSheet, type: 'googleSheet'}, active: true, current: true};
+      collections.defaultCollections.push(sheet);
+    }
+    else {
+      var sheet = {key: {key: '1-4Tl0L9OHCU0mFRn_8RJd9PlAMPKP3wMy8GSmvu1X7w', type: 'googleSheet'}, active: true, current: true};
+    }
 
-      if (googleDocHash != undefined) {
-        var gdoc = {key: {key: googleDocHash, type: 'googleSheet'}, active: true, current: true};
-        collections.defaultCollections.push(gdoc);
-      }
-      else {
-        var gdoc = {key: {key: '1-4Tl0L9OHCU0mFRn_8RJd9PlAMPKP3wMy8GSmvu1X7w', type: 'googleSheet'}, active: true, current: true};
-      }
-
-      if (pinterest_user != undefined && pinterest_board != undefined) {
-        var pinboard = {key: {boardname: pinterest_board, username: pinterest_user, type: 'pinterest'}, active: true, current: true}
-        collections.defaultCollections.push(pinboard);
-      }
-      else {
-        pinboard = {key: {boardname: 'patterns', username: 'chachasikes', type: 'pinterest'}, active: true, current: true};
-      }
-
-        // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'}
-        // {key: {key: '1FPefy-GxbVtD9osXviZTudATTYwNW0QCOI0CWApGEpw', type: 'googleSheet'}, active: true, current: true},
-
-//         // {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
-        // {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
-        // 
+    if (pinterestUser != undefined && pinterestBoard != undefined) {
+      var pinboard = {key: {boardname: pinterestBoard, username: pinterestUser, type: 'pinterest'}, active: true, current: true}
+      collections.defaultCollections.push(pinboard);
+    }
+    else {
+      pinboard = {key: {boardname: 'patterns', username: 'chachasikes', type: 'pinterest'}, active: true, current: true};
+    }
 
     if (collections.defaultCollections.length === 0) {
         collections.defaultCollections.push(pinboard);
-        collections.defaultCollections.push(gdoc);
+        collections.defaultCollections.push(sheet);
     }
-
 
     return collections;
   },
@@ -79,34 +53,24 @@ var Collections = React.createClass({
   },
 
   loadStoredCollections: function() {
-    // Get data from storage. If data exists, use it for the main data object, otherwise use defaults for demo-purposes.
-    // if ( this.props.HTML5LocalStorage !== undefined && this.props.HTML5LocalStorage !== null && (this.state === null || this.state.storedCollections.length == 0)) {
-    //   return this.props.HTML5LocalStorage;
-    // }
-    // else if (this.state.storedCollections.length > 0) {
-    //   return this.state.storedCollections;
-    // }
-    // else {
-      // If not, use data from the defaults.
-      return this.props.defaultCollections;
-    // }
+    return this.props.defaultCollections;
   },
 
-  setHTML5LocalStorage: function() {
-    // Safari, in Private Browsing Mode, looks like it supports localStorage but all calls to setItem
-    // throw QuotaExceededError. We're going to detect this and just silently drop any calls to setItem
-    // to avoid the entire page breaking, without having to do a check at each usage of Storage.
-    if (typeof localStorage === 'object') {
-      try {
-        // sessionStorage.removeItem('whatshould_local_paths');
-        localStorage.setItem("whatshould_local_paths", JSON.stringify(this.state.storedCollections));
-      } catch (e) {
-        Storage.prototype._setItem = Storage.prototype.setItem;
-        Storage.prototype.setItem = function() {};
-        alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
-      }
-    }
-  },
+  // setHTML5LocalStorage: function() {
+  //   // Safari, in Private Browsing Mode, looks like it supports localStorage but all calls to setItem
+  //   // throw QuotaExceededError. We're going to detect this and just silently drop any calls to setItem
+  //   // to avoid the entire page breaking, without having to do a check at each usage of Storage.
+  //   if (typeof localStorage === 'object') {
+  //     try {
+  //       // sessionStorage.removeItem('whatshould_local_paths');
+  //       localStorage.setItem("whatshould_local_paths", JSON.stringify(this.state.storedCollections));
+  //     } catch (e) {
+  //       Storage.prototype._setItem = Storage.prototype.setItem;
+  //       Storage.prototype.setItem = function() {};
+  //       alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
+  //     }
+  //   }
+  // },
 
   render: function() {
     // If we have data for the collections
