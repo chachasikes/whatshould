@@ -1,3 +1,15 @@
+
+//http://thesassway.com/intermediate/dynamically-change-text-color-based-on-its-background-with-sass
+@function set-default-span-text-color($color) {
+  @if (lightness($color) > 50) {
+    @return #000000; // Lighter backgorund, return dark color
+  } @else {
+    @return #ffffff; // Darker background, return light color
+  }
+}
+
+$default_span_color: rgb(172, 34, 34);   
+
 body {
   background-color: yellow;
 }
@@ -49,7 +61,10 @@ h2 {
   padding: 8px;
   display: block;
   text-transform: lowercase;
-
+  color: set-default-span-text-color($default_span_color);
+  strong {
+    padding-right: 10px;
+  }
 }
 
 #menu-toggle {
