@@ -29,7 +29,7 @@ gulp.task('styles', function() {
     // .pipe(sass({sourcemap: true, sourcemapPath: './sass/'}))
     .on('error', function (err) { console.log(err.message); })
     .pipe(minifycss())
-    .pipe(gulp.dest('dist/styles/css'))
+    .pipe(gulp.dest('public/styles/css'))
     .pipe(notify({ message: 'Styles task complete' }));
 });
 
@@ -40,13 +40,13 @@ gulp.task('scripts', function() {
     // .pipe(jshint('.jshintrc'))
     // .pipe(jshint.reporter('default'))
     // .pipe(concat('app.js'))
-    .pipe(gulp.dest('dist/scripts'))
+    .pipe(gulp.dest('public/scripts'))
     // .pipe(rename({ suffix: '.min' }))
     // .pipe(uglify())  // crashes - uglify error.
     // .on('error', function(){
     //   //do whatever here
     // })
-    // .pipe(gulp.dest('dist/scripts'))
+    // .pipe(gulp.dest('public/scripts'))
     .pipe(notify({ message: 'Scripts task complete' }));
 
 
@@ -54,13 +54,13 @@ gulp.task('scripts', function() {
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(concat('app.js'))
-    // .pipe(gulp.dest('dist/scripts'))
+    // .pipe(gulp.dest('public/scripts'))
     .pipe(rename({ suffix: '.min' }))
     // .pipe(uglify())  // crashes - uglify error.
     // .on('error', function(){
     //   //do whatever here
     // })
-    .pipe(gulp.dest('dist/scripts'))
+    .pipe(gulp.dest('public/scripts'))
     .pipe(notify({ message: 'Scripts task complete' }));
 });
  
@@ -68,13 +68,13 @@ gulp.task('scripts', function() {
 gulp.task('images', function() {
   return gulp.src('src/images/**/*')
     .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('dist/images/'))
+    .pipe(gulp.dest('public/images/'))
     .pipe(notify({ message: 'Images task complete' }));
 });
 
 // Clean
 gulp.task('clean', function(cb) {
-    del(['dist/styles/css', 'dist/scripts/js'], cb)
+    del(['public/styles/css', 'public/scripts/js'], cb)
 });
  
 // Default task
@@ -97,8 +97,8 @@ gulp.task('watch', function() {
   // Create LiveReload server
   livereload.listen();
 
-  // Watch any files in dist/, reload on change
-  gulp.watch(['dist/**', 'dist/**/**']).on('change', livereload.changed)
+  // Watch any files in public/, reload on change
+  gulp.watch(['public/**', 'public/**/**']).on('change', livereload.changed)
 
 });
 
@@ -122,18 +122,18 @@ gulp.task('watch', function() {
 // browserifyTask({
 //   development: true,
 //   src: './src/main.js',
-//   dest: './dist/'
+//   dest: './public/'
 // });
 
 // cssTask({
 //   development: true,
 //   src: './styles/**/*.css',
-//   dest: './dist'
+//   dest: './public'
 // });
 
 // gulp.task('specs', function() {
 //   return gulp.src('src/spec/**/*')
-//     .pipe(gulp.dest('dist/spec'))
+//     .pipe(gulp.dest('public/spec'))
 //     .pipe(notify({ message: 'Specs task complete' }));
 // });
 
@@ -163,13 +163,13 @@ gulp.task('watch', function() {
 //   browserifyTask({
 //     development: false,
 //     src: './src/main.js',
-//     dest: './dist/'
+//     dest: './public/'
 //   });
   
 //   cssTask({
 //     development: false,
 //     src: './styles/**/*.css',
-//     dest: './dist'
+//     dest: './public'
 //   });
 
 // });
@@ -177,7 +177,7 @@ gulp.task('watch', function() {
 // Runs the test with phantomJS and produces XML files
 // that can be used with f.ex. jenkins
 // gulp.task('test', function () {
-//     return gulp.src('./dist/spec/testrunner-phantomjs.html')
+//     return gulp.src('./public/spec/testrunner-phantomjs.html')
 //       .pipe(jasminePhantomJs());
 // });
 
@@ -186,13 +186,13 @@ gulp.task('watch', function() {
   //   .pipe(jshint('.jshintrc'))
   //   .pipe(jshint.reporter('default'))
   //   .pipe(concat('app.js'))
-  //   .pipe(gulp.dest('dist/scripts'))
+  //   .pipe(gulp.dest('public/scripts'))
   //   .pipe(rename({ suffix: '.min' }))
   //   // .pipe(uglify())  // crashes - uglify error.
   //   // .on('error', function(){
   //   //   //do whatever here
   //   // })
-  //   .pipe(gulp.dest('dist/scripts'))
+  //   .pipe(gulp.dest('public/scripts'))
   //   .pipe(notify({ message: 'Scripts task complete' }));
 
 
