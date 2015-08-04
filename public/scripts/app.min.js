@@ -278,6 +278,7 @@ var CollectionItem = React.createClass({
   // Chose an item from a column list and format as a data object for display.
   getRandomColumnItem: function(columnKey, column) {
     var randomRowNumber = Math.floor(Math.random()*column.length);
+    console.log(randomRowNumber);
     var randomItem = column[randomRowNumber]['content']['$t'];
     console.log(randomItem);
 
