@@ -11,7 +11,7 @@ var Collections = React.createClass({
 
 
     var googleDocHash = getURLParameter('gdoc');
-    var pinterest_username = getURLParameter('pinterest_username');
+    var pinterest_user = getURLParameter('pinterest_user');
     var pinterest_board = getURLParameter('pinboard');
 
     
@@ -25,33 +25,44 @@ var Collections = React.createClass({
 
     // 1Zjt-QADqUh_uALkR8fNUfyahaVIGw8mTmxDxFG3WMSo
 
+    var collections = {
+      defaultCollections: [
+    
+      ]
+      // HTML5LocalStorage: JSON.parse(HTML5LocalStorage)
+    };
+
+
       if (googleDocHash != undefined) {
         var gdoc = {key: {key: googleDocHash, type: 'googleSheet'}, active: true, current: true};
+        collections.defaultCollections.push(gdoc);
       }
       else {
         var gdoc = {key: {key: '1-4Tl0L9OHCU0mFRn_8RJd9PlAMPKP3wMy8GSmvu1X7w', type: 'googleSheet'}, active: true, current: true};
       }
 
-      if (pinterest_username != undefined && pinterest_board != undefined) {
-        var pinboard = {key: {boardname: pinterest_board, username: pinterest_username, type: 'pinterest'}, active: true, current: true}
+      if (pinterest_user != undefined && pinterest_board != undefined) {
+        var pinboard = {key: {boardname: pinterest_board, username: pinterest_user, type: 'pinterest'}, active: true, current: true}
+        collections.defaultCollections.push(pinboard);
       }
       else {
         pinboard = {key: {boardname: 'patterns', username: 'chachasikes', type: 'pinterest'}, active: true, current: true};
       }
 
-
-
-    return {
-      defaultCollections: [
-        // {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
-        // {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
-        pinboard,
-        // {key: {key: '1FPefy-GxbVtD9osXviZTudATTYwNW0QCOI0CWApGEpw', type: 'googleSheet'}, active: true, current: true},
-        gdoc
         // {key: '1voa_8uGY_kGOkenOq3pkkK6zVBQEVmpVhv3KGF9UYII', active: true, current: true, type: 'googleSheet'}
-      ],
-      HTML5LocalStorage: JSON.parse(HTML5LocalStorage)
-    };
+        // {key: {key: '1FPefy-GxbVtD9osXviZTudATTYwNW0QCOI0CWApGEpw', type: 'googleSheet'}, active: true, current: true},
+
+//         // {key: {key: '17FBVvem0oo_nj3KuwsoUeDJmJ0yuibtkJMkR7-vCEFU', type: 'googleSheet'}, active: true, current: true},
+        // {key: {boardname: 'silver', username: 'chachasikes', type: 'pinterest'}, active: true, current: true},
+        // 
+
+    if (collections.defaultCollections.length === 0) {
+        collections.defaultCollections.push(pinboard);
+        collections.defaultCollections.push(gdoc);
+    }
+
+
+    return collections;
   },
 
   // gdoc_link_google_sheet_key_value: 'https://docs.google.com/spreadsheets/d/114lrI12YPOnfix390rewcTFudfrsIvu4jmd9fk-v-uw/edit#gid=0'
