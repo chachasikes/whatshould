@@ -15,17 +15,19 @@ I've created google sheets for you all & given you editor permissions.
 * I've included the pantone & crayola colors set. Yes, the Pantone colors have a Sass treatment that is supposed to make them dynamically color the text in relation to the background. Sometimes that works.
 * For now, I'm not planning to 
 
-Please let me know any features that would be pleasant for you.
+### Future Features as of August 4, 2015, 11 p.m.
+Please let me know any features that would be pleasant for you. I intend to work on the design and layout - and eventually a form that will help you build URLs to your own projects that you can store yourself. I want to see how far this project can go without a database and without a login system. So far I'm quite pleased with google sheets & pinterest as the backend. One friend mentioned she would like to see her favorited tweets. This is a possibility. Also something integrated with some sort of list for "read it later" blog posts. I was thinking it would be nice to be re-presented with those reading materials again since 'save it later' means that I will never read it unless I find it again via Googling it.
 
-Chacha
+### Games
+If you think of games you can play with this that you want to share, we can use githubs wiki or issues or something to record and share them. 
+
+
+## Examples 
+### Chacha
 http://prompts.chachaville.com/
 I'm the default. You can see my "Pattern Game" and my pinboard of patterns.
 
-
-
-
-Dharmishta
-
+### Dharmishta
 Pinboard + Google Sheet
 http://prompts.chachaville.com/?google_sheet=1Zjt-QADqUh_uALkR8fNUfyahaVIGw8mTmxDxFG3WMSo&pinterest_user=dharmishta&pinboard=kitchen
 
@@ -35,9 +37,7 @@ http://prompts.chachaville.com/?pinterest_user=dharmishta&pinboard=kitchen
 Just Google Sheet
 http://prompts.chachaville.com/?google_sheet=1Zjt-QADqUh_uALkR8fNUfyahaVIGw8mTmxDxFG3WMSo
 
-
-
-Molly
+### Molly
 http://prompts.chachaville.com/?google_sheet=1RI7Q633DGB9SRxBbaSgOL0DQ-7iV45-r2aO3nlP7g14&pinterest_user=mollyampersand&pinboard=public-art
 
 Just Pinboard
@@ -46,8 +46,7 @@ http://prompts.chachaville.com/?pinterest_user=mollyampersand&pinboard=artdesign
 Just Google Sheet
 http://prompts.chachaville.com/?google_sheet=1RI7Q633DGB9SRxBbaSgOL0DQ-7iV45-r2aO3nlP7g14&
 
-
-Shelly
+### Shelly
 http://prompts.chachaville.com/?google_sheet=1AGtHN6Zv5G6qC43w2c3D6xRIURSO-AYQlv7VCdKHDNY&pinterest_user=shellicious&pinboard=designspiration
 
 Just Pinboard
@@ -58,8 +57,17 @@ http://prompts.chachaville.com/?google_sheet=1AGtHN6Zv5G6qC43w2c3D6xRIURSO-AYQlv
 
 
 
-Alan/
+### Alan
 http://prompts.chachaville.com/?google_sheet=1C9sTmyGKbcnniILDCkqJ7FDk_A_trz6absGP2EA5i5c&pinterest_user=alanjosephwilli&pinboard=art
 
 Quotes Example
 http://prompts.chachaville.com/?google_sheet=1vdSUsf1Aawpm2aKD1nqEdjewfpE86kGaVpAsOeTR5yo
+
+### Tiffany
+http://prompts.chachaville.com/?google_sheet=1nF-NBBBDYvpPkf1iAzXB-UDZMJQpZduJQwjNxeBiSuA&pinterest_user=tchu&pinboard=workspace-inspiration
+
+Just Pinboard
+http://prompts.chachaville.com/?pinterest_user=tchu&pinboard=workspace-inspiration
+
+Just Google Sheet
+http://prompts.chachaville.com/?google_sheet=1nF-NBBBDYvpPkf1iAzXB-UDZMJQpZduJQwjNxeBiSuA
