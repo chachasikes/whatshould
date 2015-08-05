@@ -21,6 +21,9 @@ h2 {
   font-size: 1em;
 }
 
+.panel-title a {
+  padding-left: 10px;
+}
 #collections-add {
   background-color: #eee;
   margin: 20px 0 40px 0;
@@ -105,4 +108,32 @@ h2 {
   background-image: none;
   background: none;
   background-color: #fff;
+}
+
+@media only screen 
+and (min-device-width : 375px) 
+and (max-device-width : 667px) 
+and (orientation : portrait) {
+
+.collection-item .card {
+  background-color: #eee;
+  margin: 10px 0 30px 0;
+  padding: 10px;
+  span {
+    display: block;
+    padding: 5px;
+    margin: 10px 0;
+  }
+}
+
+
+.collection-item .card-content {
+  font-size: 2em;
+  line-height: 1em;
+  .image {
+    width: 200px;
+  }
+}
+
+
 }

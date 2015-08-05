@@ -72,6 +72,13 @@ gulp.task('images', function() {
     .pipe(notify({ message: 'Images task complete' }));
 });
 
+// HTML
+gulp.task('html', function() {
+  return gulp.src('src/index.html')
+    .pipe(gulp.dest('public/'))
+    .pipe(notify({ message: 'HTML task complete' }));
+});
+
 // Clean
 gulp.task('clean', function(cb) {
     del(['public/styles/css', 'public/scripts/js'], cb)
@@ -79,7 +86,7 @@ gulp.task('clean', function(cb) {
  
 // Default task
 gulp.task('default', ['clean'], function() {
-  gulp.start('styles', 'scripts', 'images');
+  gulp.start('styles', 'scripts', 'images', 'html');
 });
  
 // Watch
@@ -93,6 +100,8 @@ gulp.task('watch', function() {
  
   // Watch image files
   gulp.watch('src/images/**/*', ['images']);
+
+  gulp.watch('src/index.html', ['images']);
  
   // Create LiveReload server
   livereload.listen();
